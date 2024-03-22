@@ -1,4 +1,4 @@
-package com.kom.foodapp
+package com.kom.foodapp.presentation.main
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

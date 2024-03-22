@@ -18,7 +18,6 @@
         <item name="colorErrorContainer">@color/dark_error_container</item>
         <item name="colorOnError">@color/dark_on_error</item>
         <item name="colorOnErrorContainer">@color/dark_on_error_container</item>
-
     </style>
 
     <style name="RoundedImageViewCategory" parent="">
