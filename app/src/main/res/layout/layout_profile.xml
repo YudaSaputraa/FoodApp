@@ -9,14 +9,14 @@
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_profile"
         android:layout_width="150dp"
-        android:layout_height="140dp"
+        android:layout_height="150dp"
         android:layout_marginVertical="32dp"
         android:scaleType="centerCrop"
-        tools:src="@tools:sample/avatars"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/RoundedImageView" />
+        app:shapeAppearanceOverlay="@style/RoundedImageView"
+        tools:src="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tv_username_title"
