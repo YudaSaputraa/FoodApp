@@ -3,9 +3,9 @@
     <string name="app_name">FoodApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="text_nav_home">Home</string>
-    <string name="text_nav_cart">Cart</string>
-    <string name="text_nav_profile">Profile</string>
+    <string name="text_nav_home">Beranda</string>
+    <string name="text_nav_cart">Keranjang</string>
+    <string name="text_nav_profile">Profil</string>
     <string name="text_cart_fragment_sample">hello this cart</string>
     <string name="text_home_fragment_sample">hello this home</string>
     <string name="text_profile_fragment_sample">hello this profile</string>
@@ -45,4 +45,10 @@
     <string name="text_username_profile">YudaSaputraa</string>
     <string name="text_email_value">yudasaputra082@gmail.com</string>
     <string name="text_phone_number_value">0898979897900</string>
+    <string name="text_cart_header">Keranjang</string>
+    <string name="text_cart_menu_name">Nasi Goreng</string>
+    <string name="text_cart_menu_price">Rp8.000</string>
+    <string name="text_cart_note">Catatan :</string>
+    <string name="text_hint_note">Catatan untuk restoran</string>
+    <string name="text_cart_total_price_item">Total : Rp6.000</string>
 </resources>
