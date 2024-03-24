@@ -6,11 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".presentation.profile.ProfileFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/layout_header"
+        layout="@layout/layout_profile_header"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/layout_profile"
+        layout="@layout/layout_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_header" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
