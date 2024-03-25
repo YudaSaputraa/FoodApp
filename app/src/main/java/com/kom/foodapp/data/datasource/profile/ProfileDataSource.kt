@@ -1,4 +1,4 @@
-package com.kom.foodapp.data.datasource
+package com.kom.foodapp.data.datasource.profile
 
 import com.kom.foodapp.data.model.Profile
 

@@ -3,8 +3,8 @@ package com.kom.foodapp.presentation.profile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.kom.foodapp.data.datasource.ProfileDataSource
-import com.kom.foodapp.data.datasource.ProfileDataSourceImpl
+import com.kom.foodapp.data.datasource.profile.ProfileDataSource
+import com.kom.foodapp.data.datasource.profile.ProfileDataSourceImpl
 import com.kom.foodapp.data.model.Profile
 
 class ProfileViewModel : ViewModel() {
