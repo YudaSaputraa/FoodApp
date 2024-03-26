@@ -2,6 +2,8 @@ package com.kom.foodapp.presentation.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.kom.foodapp.R
@@ -10,13 +12,27 @@ import com.kom.foodapp.databinding.ItemCategoryBinding
 
 class CategoryAdapter(private val itemClick: (Category) -> Unit) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
-    private val data = mutableListOf<Category>()
 
     fun submitData(items: List<Category>) {
-        data.addAll(items)
+        asyncDataDiffer.submitList(items)
     }
 
-    class CategoryViewHolder(private val binding: ItemCategoryBinding) :
+    private val asyncDataDiffer = AsyncListDiffer<Category>(
+        this, object : DiffUtil.ItemCallback<Category>() {
+            override fun areItemsTheSame(oldItem: Category, newItem: Category): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Category, newItem: Category): Boolean {
+                return oldItem.hashCode() == newItem.hashCode()
+            }
+        }
+    )
+
+    class CategoryViewHolder(
+        private val binding: ItemCategoryBinding,
+        val itemClick: (Category) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Category) {
             binding.tvCategoryName.text = item.name
@@ -28,14 +44,14 @@ class CategoryAdapter(private val itemClick: (Category) -> Unit) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        return CategoryViewHolder(
+        val binding =
             ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        )
+        return CategoryViewHolder(binding, itemClick)
     }
 
-    override fun getItemCount(): Int = data.size
+    override fun getItemCount(): Int = asyncDataDiffer.currentList.size
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        holder.bind(data[position])
+        holder.bind(asyncDataDiffer.currentList[position])
     }
 }

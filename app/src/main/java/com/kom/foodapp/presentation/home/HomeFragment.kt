@@ -1,12 +1,10 @@
 package com.kom.foodapp.presentation.home
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.foodapp.model.Menu
@@ -96,6 +94,7 @@ class HomeFragment : Fragment() {
         }
         categoryAdapter.submitData(categories)
     }
+
     private fun pushToDetail(item: Menu) {
         DetailActivity.startActivity(
             requireContext(), item

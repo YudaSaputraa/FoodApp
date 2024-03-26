@@ -10,7 +10,6 @@ import com.example.foodapp.model.Menu
 import com.example.foodapps.base.ViewHolderBinder
 import com.example.foodapps.presentation.menulist.adapter.MenuGridViewHolder
 import com.example.foodapps.presentation.menulist.adapter.MenuListViewHolder
-import com.kom.foodapp.data.model.Category
 import com.kom.foodapp.databinding.ItemMenuGridBinding
 import com.kom.foodapp.databinding.ItemMenuListBinding
 
