@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -34,6 +35,7 @@ class HomeFragment : Fragment() {
         GenericViewModelFactory.create(HomeViewModel(categoryRepository, menuRepository))
     }
     private var isGridMode: Boolean = true
+    private var isDarkMode: Boolean = false
     private var adapter: MenuAdapter? = null
 
     private val categoryAdapter: CategoryAdapter by lazy {
@@ -56,8 +58,27 @@ class HomeFragment : Fragment() {
         bindCategory(viewModel.getCategories())
         bindModeList(true)
         setClickAction()
+        setThemeMode()
 
 
+    }
+
+    private fun setThemeMode() {
+        binding.layoutHeader.ivThemeMode.setOnClickListener {
+            isDarkMode = !isDarkMode
+            if (isDarkMode) {
+                binding.layoutHeader.ivThemeMode.setImageResource(R.drawable.ic_dark_mode)
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.text_toast_theme_mode), Toast.LENGTH_SHORT
+                ).show()
+
+            } else {
+                binding.layoutHeader.ivThemeMode.setImageResource(R.drawable.ic_light_mode)
+                Toast.makeText(requireContext(), R.string.text_toast_theme_mode, Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
     }
 
     private fun bindModeList(isGridMode: Boolean) {

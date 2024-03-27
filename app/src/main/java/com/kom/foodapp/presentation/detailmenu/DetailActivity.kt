@@ -6,14 +6,22 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import coil.load
 import com.example.foodapp.model.Menu
 import com.kom.foodapp.R
+import com.kom.foodapp.data.datasource.cart.CartDataSource
+import com.kom.foodapp.data.datasource.cart.CartDatabaseDataSource
+import com.kom.foodapp.data.repository.CartRepository
+import com.kom.foodapp.data.repository.CartRepositoryImpl
+import com.kom.foodapp.data.source.local.database.AppDatabase
 import com.kom.foodapp.databinding.ActivityDetailBinding
+import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.formatToRupiah
+import com.kom.foodapp.utils.proceedWhen
 
 class DetailActivity : AppCompatActivity() {
     private val binding: ActivityDetailBinding by lazy {
@@ -21,6 +29,16 @@ class DetailActivity : AppCompatActivity() {
     }
     private var quantity = 1
     private var totalPrice: Double = 0.0
+
+    private val viewModel: DetailMenuViewModel by viewModels {
+        val database = AppDatabase.getInstance(this)
+        val dataSource: CartDataSource = CartDatabaseDataSource(database.cartDao())
+        val cartRepository: CartRepository = CartRepositoryImpl(dataSource)
+        GenericViewModelFactory.create(
+            DetailMenuViewModel(intent?.extras, cartRepository)
+        )
+    }
+
 
     companion object {
         const val EXTRAS_DETAIL_MENU = "EXTRAS_DETAIL_MENU"
@@ -35,52 +53,126 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        getIntentData()
-        backToHome()
-        intent.extras?.getParcelable<Menu>(EXTRAS_DETAIL_MENU)?.let { setItemQuantity(it) }
+//        getIntentData()
+//        backToHome()
+        bindMenu(viewModel.menu)
+        navigateToGoogleMaps(viewModel.menu)
+        observeData()
+        setClickListener()
+
     }
 
-    private fun setItemQuantity(menu: Menu) {
+    private fun setClickListener() {
+        binding.layoutDetailMenu.icBack.setOnClickListener {
+            onBackPressed()
+        }
         binding.layoutAddCart.ivMinus.setOnClickListener {
-            if (quantity > 1) {
-                quantity -= 1
-                totalPrice -= menu.price
-                updateQuantityLayout()
-            } else {
-                Toast.makeText(this, getString(R.string.text_toast_on_quantity), Toast.LENGTH_SHORT)
-                    .show()
-            }
+            viewModel.decrementItem()
         }
         binding.layoutAddCart.ivPlus.setOnClickListener {
-            quantity += 1
-            totalPrice += menu.price
-            updateQuantityLayout()
+            viewModel.incrementItem()
         }
-        updateQuantityLayout()
+        binding.layoutAddCart.btnAddToCart.setOnClickListener {
+            addMenuToCart()
+        }
     }
 
-    private fun updateQuantityLayout() {
-        binding.layoutAddCart.tvQuantity.text = quantity.toString()
-        binding.layoutAddCart.btnAddToCart.text =
-            getString(
-                R.string.placeholder_total_price, totalPrice.formatToRupiah()
+    private fun addMenuToCart() {
+        viewModel.addItemToCart().observe(this) {
+            it.proceedWhen(
+                doOnSuccess = {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.text_add_cart_on_success), Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                },
+                doOnError = {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.text_add_cart_on_error), Toast.LENGTH_SHORT
+                    ).show()
+                },
+                doOnLoading = {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.text_add_cart_on_loading), Toast.LENGTH_SHORT
+                    ).show()
+                }
+
             )
-
+        }
     }
 
-    private fun getIntentData() {
-        intent.extras?.getParcelable<Menu>(EXTRAS_DETAIL_MENU)?.let {
-            setImgMenu(it.image)
-            setDetailData(it)
-            setItemQuantity(it)
-            totalPrice = it.price
+    private fun observeData() {
+        viewModel.priceLiveData.observe(this) {
+            binding.layoutAddCart.btnAddToCart.isEnabled = it != 0.0
+            binding.layoutAddCart.btnAddToCart.text = getString(
+                R.string.placeholder_total_price, it.formatToRupiah()
+            )
+        }
+        viewModel.menuCountLiveData.observe(this) {
+            binding.layoutAddCart.tvQuantity.text = it.toString()
+        }
+    }
+
+    private fun bindMenu(menu: Menu?) {
+        menu?.let { item ->
+            binding.layoutDetailMenu.ivDetailMenu.load(item.imageUrl) {
+                crossfade(true)
+
+            }
+            binding.layoutDetailMenu.tvDetailMenuName.text = menu.name
+            binding.layoutDetailMenu.tvDetailMenuDesc.text = menu.desc
+            binding.layoutDetailMenu.tvDetailMenuPrice.text = menu.price.formatToRupiah()
+            binding.layoutDetailLocation.tvDetailLocationAddress.text = menu.locationAddress
 
         }
     }
 
-    private fun navigateToGoogleMaps(menu: Menu) {
+//    private fun setItemQuantity(menu: Menu) {
+//        binding.layoutAddCart.ivMinus.setOnClickListener {
+//            if (quantity > 1) {
+//                quantity -= 1
+//                totalPrice -= menu.price
+//                updateQuantityLayout()
+//            } else {
+//                Toast.makeText(this, getString(R.string.text_toast_on_quantity), Toast.LENGTH_SHORT)
+//                    .show()
+//            }
+//        }
+//        binding.layoutAddCart.ivPlus.setOnClickListener {
+//            quantity += 1
+//            totalPrice += menu.price
+//            updateQuantityLayout()
+//        }
+//        updateQuantityLayout()
+//    }
+
+//    private fun updateQuantityLayout() {
+//        binding.layoutAddCart.tvQuantity.text = quantity.toString()
+//        binding.layoutAddCart.btnAddToCart.text =
+//            getString(
+//                R.string.placeholder_total_price, totalPrice.formatToRupiah()
+//            )
+//
+//    }
+
+//    private fun getIntentData() {
+//        intent.extras?.getParcelable<Menu>(EXTRAS_DETAIL_MENU)?.let {
+//            setImgMenu(it.imageUrl)
+//            setDetailData(it)
+//            setItemQuantity(it)
+//            totalPrice = it.price
+//
+//        }
+//    }
+
+    private fun navigateToGoogleMaps(menu: Menu?) {
+        menu?.let { item->
         binding.layoutDetailLocation.tvDetailLocationAddress.setOnClickListener {
-            openGoogleMaps(menu.locationUrl)
+            openGoogleMaps(item.locationUrl)
+        }
         }
     }
 
@@ -90,22 +182,22 @@ class DetailActivity : AppCompatActivity() {
         startActivity(mapIntent)
     }
 
-    private fun setDetailData(menu: Menu) {
-        binding.layoutDetailMenu.tvDetailMenuName.text = menu.name
-        binding.layoutDetailMenu.tvDetailMenuDesc.text = menu.desc
-        binding.layoutDetailMenu.tvDetailMenuPrice.text = menu.price.formatToRupiah()
-        binding.layoutDetailLocation.tvDetailLocationAddress.text = menu.locationAddress
-        navigateToGoogleMaps(menu)
+//    private fun setDetailData(menu: Menu) {
+//        binding.layoutDetailMenu.tvDetailMenuName.text = menu.name
+//        binding.layoutDetailMenu.tvDetailMenuDesc.text = menu.desc
+//        binding.layoutDetailMenu.tvDetailMenuPrice.text = menu.price.formatToRupiah()
+//        binding.layoutDetailLocation.tvDetailLocationAddress.text = menu.locationAddress
+//        navigateToGoogleMaps(menu)
+//
+//    }
 
-    }
+//    private fun setImgMenu(image: String?) {
+//        image?.let { binding.layoutDetailMenu.ivDetailMenu.load(it) }
+//    }
 
-    private fun setImgMenu(image: String?) {
-        image?.let { binding.layoutDetailMenu.ivDetailMenu.load(it) }
-    }
-
-    private fun backToHome() {
-        binding.layoutDetailMenu.icBack.setOnClickListener {
-            finish()
-        }
-    }
+//    private fun backToHome() {
+//        binding.layoutDetailMenu.icBack.setOnClickListener {
+//            finish()
+//        }
+//    }
 }

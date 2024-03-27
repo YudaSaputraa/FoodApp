@@ -13,7 +13,7 @@ class MenuGridViewHolder(
 ) : ViewHolder(binding.root), ViewHolderBinder<Menu> {
     override fun bind(item: Menu) {
         item.let {
-            binding.ivMenuImage.load(it.image)
+            binding.ivMenuImage.load(it.imageUrl)
             binding.tvMenuName.text = it.name
             binding.tvMenuPrice.text = it.price.formatToRupiah()
             itemView.setOnClickListener{
