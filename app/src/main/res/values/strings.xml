@@ -53,5 +53,5 @@
     <string name="text_cart_total_price_item">Total : Rp6.000</string>
     <string name="text_toast_on_quantity">Minimum pemesanan 1</string>
     <string name="text_add_cart_title">Tambah ke Keranjang -</string>
-    <string name="text_button_add_cart">Tambah ke Keranjang - %1$s</string>
+    <string name="placeholder_total_price">Tambah ke Keranjang - %1$s</string>
 </resources>

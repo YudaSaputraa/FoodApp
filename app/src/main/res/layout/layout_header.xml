@@ -42,26 +42,16 @@
             android:text="@string/text_greetings"
             android:textColor="@color/on_secondary"
             android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/iv_cart"
+            app:layout_constraintEnd_toStartOf="@+id/iv_theme_mode"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_name" />
 
         <ImageView
-            android:id="@+id/iv_cart"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginHorizontal="16dp"
+            android:id="@+id/iv_theme_mode"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginTop="4dp"
-            android:src="@drawable/ic_cart"
-            app:layout_constraintEnd_toStartOf="@+id/iv_profile"
-            app:layout_constraintTop_toTopOf="@id/tv_name" />
-
-        <ImageView
-            android:id="@+id/iv_profile"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="4dp"
-            android:src="@drawable/ic_profile"
+            android:src="@drawable/ic_light_mode"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_name" />
 

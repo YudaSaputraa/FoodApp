@@ -63,7 +63,7 @@ class DetailActivity : AppCompatActivity() {
         binding.layoutAddCart.tvQuantity.text = quantity.toString()
         binding.layoutAddCart.btnAddToCart.text =
             getString(
-                R.string.text_button_add_cart, totalPrice.formatToRupiah()
+                R.string.placeholder_total_price, totalPrice.formatToRupiah()
             )
 
     }
