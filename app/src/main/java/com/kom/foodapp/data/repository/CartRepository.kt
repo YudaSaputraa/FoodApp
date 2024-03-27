@@ -1,10 +1,10 @@
 package com.kom.foodapp.data.repository
 
+import com.example.foodapp.model.Menu
 import com.kom.foodapp.data.datasource.cart.CartDataSource
 import com.kom.foodapp.data.mapper.toCartEntity
 import com.kom.foodapp.data.mapper.toCartList
 import com.kom.foodapp.data.model.Cart
-import com.kom.foodapp.data.model.Menu
 import com.kom.foodapp.data.source.local.database.entity.CartEntity
 import com.kom.foodapp.utils.ResultWrapper
 import com.kom.foodapp.utils.proceed
