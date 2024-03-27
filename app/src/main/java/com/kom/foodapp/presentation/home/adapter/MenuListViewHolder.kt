@@ -1,11 +1,10 @@
-package com.example.foodapps.presentation.menulist.adapter
+package com.kom.foodapp.presentation.home.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.foodapp.model.Menu
 import com.example.foodapps.base.ViewHolderBinder
 import com.kom.foodapp.databinding.ItemMenuListBinding
-import com.kom.foodapp.presentation.home.adapter.MenuAdapter
 import com.kom.foodapp.utils.formatToRupiah
 
 class MenuListViewHolder(
@@ -17,7 +16,7 @@ class MenuListViewHolder(
             binding.ivMenuImage.load(it.image)
             binding.tvMenuName.text = it.name
             binding.tvMenuPrice.text = it.price.formatToRupiah()
-            itemView.setOnClickListener{
+            itemView.setOnClickListener {
                 listener.onItemSelected(item)
             }
         }

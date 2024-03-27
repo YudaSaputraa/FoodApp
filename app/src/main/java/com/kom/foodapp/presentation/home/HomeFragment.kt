@@ -1,12 +1,10 @@
 package com.kom.foodapp.presentation.home
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.foodapp.model.Menu
@@ -19,6 +17,7 @@ import com.kom.foodapp.data.repository.CategoryRepositoryImpl
 import com.kom.foodapp.data.repository.MenuRepository
 import com.kom.foodapp.data.repository.MenuRepositoryImpl
 import com.kom.foodapp.databinding.FragmentHomeBinding
+import com.kom.foodapp.presentation.detailmenu.DetailActivity
 import com.kom.foodapp.presentation.home.adapter.CategoryAdapter
 import com.kom.foodapp.presentation.home.adapter.MenuAdapter
 import com.kom.foodapp.utils.GenericViewModelFactory
@@ -71,7 +70,7 @@ class HomeFragment : Fragment() {
             listMode = listMode,
             listener = object : MenuAdapter.OnItemClickedListener<Menu> {
                 override fun onItemSelected(item: Menu) {
-//                    pushToDetail(item)
+                    pushToDetail(item)
                 }
 
             }
@@ -94,6 +93,12 @@ class HomeFragment : Fragment() {
             adapter = categoryAdapter
         }
         categoryAdapter.submitData(categories)
+    }
+
+    private fun pushToDetail(item: Menu) {
+        DetailActivity.startActivity(
+            requireContext(), item
+        )
     }
 
     private fun setClickAction() {

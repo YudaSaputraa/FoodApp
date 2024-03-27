@@ -51,4 +51,7 @@
     <string name="text_cart_note">Catatan :</string>
     <string name="text_hint_note">Catatan untuk restoran</string>
     <string name="text_cart_total_price_item">Total : Rp6.000</string>
+    <string name="text_toast_on_quantity">Minimum pemesanan 1</string>
+    <string name="text_add_cart_title">Tambah ke Keranjang -</string>
+    <string name="placeholder_total_price">Tambah ke Keranjang - %1$s</string>
 </resources>
