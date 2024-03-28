@@ -5,11 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import coil.load
 import com.example.foodapp.model.Menu
 import com.kom.foodapp.R
@@ -27,8 +24,6 @@ class DetailActivity : AppCompatActivity() {
     private val binding: ActivityDetailBinding by lazy {
         ActivityDetailBinding.inflate(layoutInflater)
     }
-    private var quantity = 1
-    private var totalPrice: Double = 0.0
 
     private val viewModel: DetailMenuViewModel by viewModels {
         val database = AppDatabase.getInstance(this)
@@ -38,7 +33,6 @@ class DetailActivity : AppCompatActivity() {
             DetailMenuViewModel(intent?.extras, cartRepository)
         )
     }
-
 
     companion object {
         const val EXTRAS_DETAIL_MENU = "EXTRAS_DETAIL_MENU"
@@ -99,7 +93,6 @@ class DetailActivity : AppCompatActivity() {
                         getString(R.string.text_add_cart_on_loading), Toast.LENGTH_SHORT
                     ).show()
                 }
-
             )
         }
     }
@@ -130,44 +123,6 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-//    private fun setItemQuantity(menu: Menu) {
-//        binding.layoutAddCart.ivMinus.setOnClickListener {
-//            if (quantity > 1) {
-//                quantity -= 1
-//                totalPrice -= menu.price
-//                updateQuantityLayout()
-//            } else {
-//                Toast.makeText(this, getString(R.string.text_toast_on_quantity), Toast.LENGTH_SHORT)
-//                    .show()
-//            }
-//        }
-//        binding.layoutAddCart.ivPlus.setOnClickListener {
-//            quantity += 1
-//            totalPrice += menu.price
-//            updateQuantityLayout()
-//        }
-//        updateQuantityLayout()
-//    }
-
-//    private fun updateQuantityLayout() {
-//        binding.layoutAddCart.tvQuantity.text = quantity.toString()
-//        binding.layoutAddCart.btnAddToCart.text =
-//            getString(
-//                R.string.placeholder_total_price, totalPrice.formatToRupiah()
-//            )
-//
-//    }
-
-//    private fun getIntentData() {
-//        intent.extras?.getParcelable<Menu>(EXTRAS_DETAIL_MENU)?.let {
-//            setImgMenu(it.imageUrl)
-//            setDetailData(it)
-//            setItemQuantity(it)
-//            totalPrice = it.price
-//
-//        }
-//    }
-
     private fun navigateToGoogleMaps(menu: Menu?) {
         menu?.let { item->
         binding.layoutDetailLocation.tvDetailLocationAddress.setOnClickListener {
@@ -182,22 +137,4 @@ class DetailActivity : AppCompatActivity() {
         startActivity(mapIntent)
     }
 
-//    private fun setDetailData(menu: Menu) {
-//        binding.layoutDetailMenu.tvDetailMenuName.text = menu.name
-//        binding.layoutDetailMenu.tvDetailMenuDesc.text = menu.desc
-//        binding.layoutDetailMenu.tvDetailMenuPrice.text = menu.price.formatToRupiah()
-//        binding.layoutDetailLocation.tvDetailLocationAddress.text = menu.locationAddress
-//        navigateToGoogleMaps(menu)
-//
-//    }
-
-//    private fun setImgMenu(image: String?) {
-//        image?.let { binding.layoutDetailMenu.ivDetailMenu.load(it) }
-//    }
-
-//    private fun backToHome() {
-//        binding.layoutDetailMenu.icBack.setOnClickListener {
-//            finish()
-//        }
-//    }
 }
