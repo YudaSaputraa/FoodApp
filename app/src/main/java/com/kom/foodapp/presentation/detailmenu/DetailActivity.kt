@@ -24,8 +24,6 @@ class DetailActivity : AppCompatActivity() {
     private val binding: ActivityDetailBinding by lazy {
         ActivityDetailBinding.inflate(layoutInflater)
     }
-    private var quantity = 1
-    private var totalPrice: Double = 0.0
 
     private val viewModel: DetailMenuViewModel by viewModels {
         val database = AppDatabase.getInstance(this)
@@ -35,7 +33,6 @@ class DetailActivity : AppCompatActivity() {
             DetailMenuViewModel(intent?.extras, cartRepository)
         )
     }
-
 
     companion object {
         const val EXTRAS_DETAIL_MENU = "EXTRAS_DETAIL_MENU"
