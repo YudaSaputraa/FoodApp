@@ -129,13 +129,4 @@ class CartFragment : Fragment() {
     private fun setList() {
         binding.rvCart.adapter = this@CartFragment.adapter
     }
-
-//    private fun tryNavigateCheckout() {
-//        binding.layoutHeader.ivEditProfile.setOnClickListener {
-//            CheckoutActivity.startActivity(
-//                requireContext()
-//            )
-//        }
-//    }
-
 }

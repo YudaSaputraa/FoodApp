@@ -1,7 +1,7 @@
 package com.kom.foodapp.data.repository
 
-import com.example.foodapp.model.Menu
 import com.kom.foodapp.data.datasource.menu.MenuDataSource
+import com.kom.foodapp.data.model.Menu
 
 interface MenuRepository {
     fun getMenu(): List<Menu>

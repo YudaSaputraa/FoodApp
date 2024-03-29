@@ -5,10 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kom.foodapp.R
 import com.kom.foodapp.data.datasource.cart.CartDataSource
@@ -23,6 +23,9 @@ import com.kom.foodapp.presentation.main.MainActivity
 import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.formatToRupiah
 import com.kom.foodapp.utils.proceedWhen
+import java.text.SimpleDateFormat
+import java.util.Date
+
 
 class CheckoutActivity : AppCompatActivity() {
     private val binding: ActivityCheckoutBinding by lazy {
@@ -57,25 +60,38 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun setActionOnSuccess() {
-        binding.layoutButtonOrder.btnAddToCart.setOnClickListener {
-            val dialog = Dialog(this)
-            dialog.setContentView(R.layout.layout_dialog_order)
-            val layoutParams = WindowManager.LayoutParams()
-            layoutParams.copyFrom(dialog.window?.attributes)
-            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-            dialog.window?.attributes = layoutParams
-            val rvSummaryOrder = dialog.findViewById<RecyclerView>(R.id.rv_summary_order)
-            rvSummaryOrder.adapter = priceItemAdapter
-            val buttonClose = dialog.findViewById<Button>(R.id.btn_back_on_success)
-            dialog.show()
-            buttonClose.setOnClickListener {
-                viewModel.deleteAllCarts()
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                dialog.dismiss()
-                finish()
-            }
+        viewModel.checkoutData.observe(this) { result ->
+            result.proceedWhen(
+                doOnSuccess = {
+                    binding.layoutButtonOrder.btnAddToCart.setOnClickListener {
+
+                        val dialog = Dialog(this)
+                        dialog.setContentView(R.layout.layout_dialog_order)
+                        val layoutParams = WindowManager.LayoutParams()
+                        layoutParams.copyFrom(dialog.window?.attributes)
+                        dialog.window?.attributes = layoutParams
+                        val currentDateAndTime =
+                            SimpleDateFormat("dd MMMM yyyy HH:mm:ss").format(Date())
+                        val tvDateTime = dialog.findViewById<TextView>(R.id.tv_date_time)
+                        tvDateTime.text = currentDateAndTime
+
+                        val rvSummaryOrder =
+                            dialog.findViewById<RecyclerView>(R.id.rv_summary_order)
+                        rvSummaryOrder.adapter = priceItemAdapter
+                        val buttonClose = dialog.findViewById<Button>(R.id.btn_back_on_success)
+                        dialog.show()
+                        buttonClose.setOnClickListener {
+                            viewModel.deleteAllCarts()
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                            dialog.dismiss()
+                            finish()
+                        }
+
+                    }
+                }
+            )
+
         }
     }
 
