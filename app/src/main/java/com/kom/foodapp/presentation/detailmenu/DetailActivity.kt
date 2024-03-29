@@ -8,10 +8,10 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
-import com.example.foodapp.model.Menu
 import com.kom.foodapp.R
 import com.kom.foodapp.data.datasource.cart.CartDataSource
 import com.kom.foodapp.data.datasource.cart.CartDatabaseDataSource
+import com.kom.foodapp.data.model.Menu
 import com.kom.foodapp.data.repository.CartRepository
 import com.kom.foodapp.data.repository.CartRepositoryImpl
 import com.kom.foodapp.data.source.local.database.AppDatabase
@@ -47,8 +47,6 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-//        getIntentData()
-//        backToHome()
         bindMenu(viewModel.menu)
         navigateToGoogleMaps(viewModel.menu)
         observeData()

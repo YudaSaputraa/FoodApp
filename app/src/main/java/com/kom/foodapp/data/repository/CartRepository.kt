@@ -1,10 +1,11 @@
 package com.kom.foodapp.data.repository
 
-import com.example.foodapp.model.Menu
 import com.kom.foodapp.data.datasource.cart.CartDataSource
 import com.kom.foodapp.data.mapper.toCartEntity
 import com.kom.foodapp.data.mapper.toCartList
 import com.kom.foodapp.data.model.Cart
+import com.kom.foodapp.data.model.Menu
+import com.kom.foodapp.data.model.PriceItem
 import com.kom.foodapp.data.source.local.database.entity.CartEntity
 import com.kom.foodapp.utils.ResultWrapper
 import com.kom.foodapp.utils.proceed
@@ -27,8 +28,10 @@ interface CartRepository {
     fun increaseCartItem(item: Cart): Flow<ResultWrapper<Boolean>>
     fun setCartNotes(item: Cart): Flow<ResultWrapper<Boolean>>
     fun deleteCart(item: Cart): Flow<ResultWrapper<Boolean>>
+    fun deleteAllCarts(): Flow<ResultWrapper<Unit>>
 
     fun getUserCartData(): Flow<ResultWrapper<Pair<List<Cart>, Double>>>
+    fun getCheckoutData(): Flow<ResultWrapper<Triple<List<Cart>, List<PriceItem>, Double>>>
 
 }
 
@@ -86,6 +89,13 @@ class CartRepositoryImpl(private val cartDataSource: CartDataSource) : CartRepos
         return proceedFlow { cartDataSource.deleteCart(item.toCartEntity()) > 0 }
     }
 
+    override fun deleteAllCarts(): Flow<ResultWrapper<Unit>> {
+        return proceedFlow {
+            cartDataSource.deleteAll()
+        }
+    }
+
+
     override fun getUserCartData(): Flow<ResultWrapper<Pair<List<Cart>, Double>>> {
         return cartDataSource.getAllCarts()
             .map {
@@ -93,6 +103,26 @@ class CartRepositoryImpl(private val cartDataSource: CartDataSource) : CartRepos
                     val result = it.toCartList()
                     val totalPrice = result.sumOf { it.menuPrice * it.itemQuantity }
                     Pair(result, totalPrice)
+                }
+            }.map {
+                if (it.payload?.first?.isEmpty() == false) return@map it
+                ResultWrapper.Empty(it.payload)
+            }.onStart {
+                emit(ResultWrapper.Loading())
+                delay(2000)
+            }
+    }
+
+    override fun getCheckoutData(): Flow<ResultWrapper<Triple<List<Cart>, List<PriceItem>, Double>>> {
+        return cartDataSource.getAllCarts()
+            .map {
+                proceed {
+                    val result = it.toCartList()
+                    val priceItemList = result.map {
+                        PriceItem(it.menuName, it.menuPrice * it.itemQuantity)
+                    }
+                    val totalPrice = priceItemList.sumOf { it.total }
+                    Triple(result, priceItemList, totalPrice)
                 }
             }.map {
                 if (it.payload?.first?.isEmpty() == false) return@map it

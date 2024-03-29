@@ -8,15 +8,19 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.foodapp.model.Menu
 import com.kom.foodapp.R
+import com.kom.foodapp.data.datasource.cart.CartDataSource
+import com.kom.foodapp.data.datasource.cart.CartDatabaseDataSource
 import com.kom.foodapp.data.datasource.category.DummyCategoryDataSource
 import com.kom.foodapp.data.datasource.menu.DummyMenuDataSource
 import com.kom.foodapp.data.model.Category
+import com.kom.foodapp.data.model.Menu
+import com.kom.foodapp.data.repository.CartRepositoryImpl
 import com.kom.foodapp.data.repository.CategoryRepository
 import com.kom.foodapp.data.repository.CategoryRepositoryImpl
 import com.kom.foodapp.data.repository.MenuRepository
 import com.kom.foodapp.data.repository.MenuRepositoryImpl
+import com.kom.foodapp.data.source.local.database.AppDatabase
 import com.kom.foodapp.databinding.FragmentHomeBinding
 import com.kom.foodapp.presentation.detailmenu.DetailActivity
 import com.kom.foodapp.presentation.home.adapter.CategoryAdapter
@@ -28,11 +32,23 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 
     private val viewModel: HomeViewModel by viewModels {
+        val database = AppDatabase.getInstance(requireContext())
         val menuDataSource = DummyMenuDataSource()
+        val cartDataSource: CartDataSource = CartDatabaseDataSource(database.cartDao())
         val menuRepository: MenuRepository = MenuRepositoryImpl(menuDataSource)
         val categoryDataSource = DummyCategoryDataSource()
+        val cartRepository = CartRepositoryImpl(cartDataSource)
+
         val categoryRepository: CategoryRepository = CategoryRepositoryImpl(categoryDataSource)
-        GenericViewModelFactory.create(HomeViewModel(categoryRepository, menuRepository))
+        GenericViewModelFactory.create(
+            HomeViewModel(
+                categoryRepository,
+                menuRepository,
+                cartRepository
+            )
+        )
+
+
     }
     private var isGridMode: Boolean = true
     private var isDarkMode: Boolean = false
@@ -63,6 +79,7 @@ class HomeFragment : Fragment() {
 
     }
 
+
     private fun setThemeMode() {
         binding.layoutHeader.ivThemeMode.setOnClickListener {
             isDarkMode = !isDarkMode
@@ -92,6 +109,10 @@ class HomeFragment : Fragment() {
             listener = object : MenuAdapter.OnItemClickedListener<Menu> {
                 override fun onItemSelected(item: Menu) {
                     pushToDetail(item)
+                }
+
+                override fun onItemAddedToCart(item: Menu) {
+                    viewModel.addItemToCart(item)
                 }
 
             }

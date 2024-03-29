@@ -2,8 +2,8 @@ package com.kom.foodapp.presentation.home.adapter
 
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import coil.load
-import com.example.foodapp.model.Menu
-import com.example.foodapps.base.ViewHolderBinder
+import com.kom.foodapp.base.ViewHolderBinder
+import com.kom.foodapp.data.model.Menu
 import com.kom.foodapp.databinding.ItemMenuGridBinding
 import com.kom.foodapp.utils.formatToRupiah
 

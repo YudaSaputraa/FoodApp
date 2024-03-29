@@ -1,6 +1,7 @@
 package com.kom.foodapp.data.datasource.menu
 
-import com.example.foodapp.model.Menu
+import com.kom.foodapp.data.model.Menu
+
 
 class DummyMenuDataSource : MenuDataSource {
     override fun getMenuData(): List<Menu> {

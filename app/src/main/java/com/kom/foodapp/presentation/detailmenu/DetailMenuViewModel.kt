@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
-import com.example.foodapp.model.Menu
+import com.kom.foodapp.data.model.Menu
 import com.kom.foodapp.data.repository.CartRepository
 import com.kom.foodapp.utils.ResultWrapper
 import kotlinx.coroutines.Dispatchers
@@ -17,10 +17,10 @@ class DetailMenuViewModel(
     private val cartRepository: CartRepository
 ) : ViewModel() {
     val menu = extras?.getParcelable<Menu>(DetailActivity.EXTRAS_DETAIL_MENU)
-     val menuCountLiveData = MutableLiveData(0).apply {
+    val menuCountLiveData = MutableLiveData(0).apply {
         postValue(0)
     }
-     val priceLiveData = MutableLiveData<Double>().apply {
+    val priceLiveData = MutableLiveData<Double>().apply {
         postValue(0.0)
     }
 
