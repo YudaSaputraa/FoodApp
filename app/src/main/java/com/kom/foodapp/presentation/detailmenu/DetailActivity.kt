@@ -47,8 +47,6 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-//        getIntentData()
-//        backToHome()
         bindMenu(viewModel.menu)
         navigateToGoogleMaps(viewModel.menu)
         observeData()

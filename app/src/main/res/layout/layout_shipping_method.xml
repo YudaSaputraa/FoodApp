@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="16dp">
+
+    <TextView
+        android:id="@+id/tv_shipping_method"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font_poppins_semibold"
+        android:text="@string/text_shipping_method_title"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/rg_payment_method"
+        android:layout_width="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_rounded_border_transparent"
+        android:orientation="horizontal"
+        android:checkedButton="@id/rb_pickup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_shipping_method">
+
+        <RadioButton
+            android:id="@+id/rb_pickup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/radio_selector_left"
+            android:button="@drawable/bg_rounded_border_transparent"
+            android:fontFamily="@font/font_poppins_semibold"
+            android:text="@string/text_radio_pickup"
+            android:textAlignment="center"
+            android:textColor="@drawable/radio_text_color_selected" />
+
+        <RadioButton
+            android:id="@+id/rb_delivery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/radio_selector_right"
+            android:layout_weight="1"
+            android:button="@drawable/bg_rounded_border_transparent"
+            android:fontFamily="@font/font_poppins_semibold"
+            android:text="@string/text_radio_delivery"
+            android:textAlignment="center"
+            android:textColor="@drawable/radio_text_color_selected" />
+
+    </RadioGroup>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

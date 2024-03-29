@@ -9,7 +9,8 @@ fun Cart?.toCartEntity() = CartEntity(
     menuName = this?.menuName.orEmpty(),
     menuPrice = this?.menuPrice ?: 0.0,
     menuImgUrl = this?.menuImgUrl.orEmpty(),
-    itemQuantity = this?.itemQuantity ?: 0
+    itemQuantity = this?.itemQuantity ?: 0,
+    itemNotes = this?.itemNotes
 )
 
 fun CartEntity?.toCart() = Cart(
@@ -19,6 +20,7 @@ fun CartEntity?.toCart() = Cart(
     menuPrice = this?.menuPrice ?: 0.0,
     menuImgUrl = this?.menuImgUrl.orEmpty(),
     itemQuantity = this?.itemQuantity ?: 0,
+    itemNotes = this?.itemNotes
 )
 
 fun List<CartEntity?>.toCartList() = this.map { it.toCart() }

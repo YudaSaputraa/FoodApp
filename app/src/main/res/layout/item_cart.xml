@@ -14,7 +14,7 @@
         android:layout_margin="8dp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/iv_cart_menu"
+            android:id="@+id/iv_menu_img"
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:scaleType="centerCrop"
@@ -24,7 +24,7 @@
             tools:src="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/tv_cart_menu_name"
+            android:id="@+id/tv_checkout_menu_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
@@ -33,11 +33,11 @@
             android:text="@string/text_cart_menu_name"
             android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@id/iv_trash"
-            app:layout_constraintStart_toEndOf="@id/iv_cart_menu"
+            app:layout_constraintStart_toEndOf="@id/iv_menu_img"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_cart_menu_price"
+            android:id="@+id/tv_checkout_menu_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
@@ -46,8 +46,8 @@
             android:text="@string/text_cart_menu_price"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@id/iv_trash"
-            app:layout_constraintStart_toEndOf="@id/iv_cart_menu"
-            app:layout_constraintTop_toBottomOf="@id/tv_cart_menu_name" />
+            app:layout_constraintStart_toEndOf="@id/iv_menu_img"
+            app:layout_constraintTop_toBottomOf="@id/tv_checkout_menu_name" />
 
         <ImageView
             android:id="@+id/iv_trash"
@@ -56,12 +56,12 @@
             android:layout_margin="8dp"
             android:src="@drawable/ic_trash"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_cart_menu_name"
-            app:layout_constraintTop_toTopOf="@id/tv_cart_menu_name"
+            app:layout_constraintStart_toEndOf="@id/tv_checkout_menu_name"
+            app:layout_constraintTop_toTopOf="@id/tv_checkout_menu_name"
             app:tint="@color/on_error" />
 
-        <EditText
-            android:id="@+id/edit_text_note"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_text_note"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:hint="@string/text_hint_note"
@@ -86,8 +86,8 @@
             android:layout_height="1dp"
             android:background="@color/darkGrey"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_cart_menu_name"
-            app:layout_constraintTop_toBottomOf="@id/iv_cart_menu" />
+            app:layout_constraintStart_toStartOf="@id/tv_checkout_menu_name"
+            app:layout_constraintTop_toBottomOf="@id/iv_menu_img" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,4 +58,21 @@
     <string name="text_add_cart_on_error">Gagal!</string>
     <string name="text_add_cart_on_loading">Loading...</string>
     <string name="text_toast_theme_mode">Kebetulan belum jadi :D</string>
+    <string name="text_checkout_header">Konfirmasi Pesanan</string>
+    <string name="text_summary_payment_title">Ringkasan Pembayaran</string>
+    <string name="text_item_title">menu per item</string>
+    <string name="text_shipping_method_title">Metode Pengiriman</string>
+    <string name="text_radio_pickup">Ambil Sendiri</string>
+    <string name="text_radio_delivery">Dikirim</string>
+    <string name="text_payment_method_title">Metode Pembayaran</string>
+    <string name="text_rb_cash">Tunai</string>
+    <string name="text_rb_e_wallet">Dompet Digital</string>
+    <string name="text_btn_order">Pesan</string>
+    <string name="text_empty_cart">Keranjangmu kosong!</string>
+    <string name="text_total_price">Total Harga</string>
+    <string name="text_total_price_cart">Rp50.000</string>
+    <string name="text_order">Pesan</string>
+    <string name="total_quantity">x%s</string>
+    <string name="text_dialog_order_success">PESANAN BERHASIL!</string>
+    <string name="text_btn_success_order">Oke</string>
 </resources>
