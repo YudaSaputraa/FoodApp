@@ -27,6 +27,8 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        editProfile()
+        setClickListener()
         profileViewModel.fetchProfileData()
 
         profileViewModel.profileData.observe(viewLifecycleOwner, Observer { profile ->
@@ -38,6 +40,21 @@ class ProfileFragment : Fragment() {
             binding.layoutProfile.editTextEmail.setText(profile.email)
             binding.layoutProfile.editTextPhoneNumber.setText(profile.phoneNumber)
         })
+    }
+    private fun setClickListener() {
+        binding.layoutHeader.ivEditProfile.setOnClickListener {
+            profileViewModel.changeEditMode()
+        }
+    }
+
+    private fun editProfile() {
+
+        profileViewModel.isEditProfile.observe(viewLifecycleOwner) {
+            binding.layoutProfile.editTextUsername.isEnabled = it
+            binding.layoutProfile.editTextEmail.isEnabled = it
+            binding.layoutProfile.editTextPhoneNumber.isEnabled = it
+
+        }
     }
 
 }
