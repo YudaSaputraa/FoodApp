@@ -41,6 +41,17 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <include
+        android:id="@+id/layout_on_empty_data_state"
+        layout="@layout/layout_on_empty_data"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/layout_header"
+        app:layout_constraintBottom_toTopOf="@id/layout_btn_total"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <include
         android:id="@+id/layout_btn_total"
         layout="@layout/layout_order_cart"
         android:layout_width="match_parent"

@@ -9,6 +9,7 @@
     tools:context=".presentation.main.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -66,5 +67,49 @@
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:listitem="@layout/item_menu_grid"
             tools:spanCount="2" />
+
+        <include
+            android:id="@+id/layout_state"
+            layout="@layout/layout_content_state"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_menu_list" />
+
+        <include
+            android:id="@+id/layout_on_empty_data_state"
+            layout="@layout/layout_on_empty_data"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_menu_list" />
+
+        <include
+            android:id="@+id/layout_on_empty_data_state_category"
+            layout="@layout/layout_on_empty_data"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:visibility="gone"
+            android:layout_marginVertical="8dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_menu_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_header" />
+
+        <include
+            android:id="@+id/layout_state_category"
+            layout="@layout/layout_content_state"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginVertical="8dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_menu_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_header" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

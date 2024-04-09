@@ -1,10 +1,11 @@
 package com.kom.foodapp.data.datasource.menu
 
 import com.kom.foodapp.data.model.Menu
+import com.kom.foodapp.data.source.network.model.menu.MenuResponse
 
 
 interface MenuDataSource {
-    fun getMenuData(): List<Menu>
+  suspend  fun getMenuData(categoryName : String? = null): MenuResponse
 }
 
 

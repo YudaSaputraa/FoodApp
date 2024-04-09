@@ -75,4 +75,9 @@
     <string name="total_quantity">x%s</string>
     <string name="text_dialog_order_success">PESANAN BERHASIL!</string>
     <string name="text_btn_success_order">Oke</string>
+    <string name="text_on_error">Error!</string>
+    <string name="text_on_menu_data_empty">Data makanan kosong nih!</string>
+    <string name="text_on_cart_empty">Keranjangmu kosong!</string>
+    <string name="text_category_on_empty">Data kategory kosong!</string>
+    <string name="text_empty_price">-</string>
 </resources>
