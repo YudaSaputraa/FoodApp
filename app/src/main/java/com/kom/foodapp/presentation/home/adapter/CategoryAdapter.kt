@@ -52,7 +52,7 @@ class CategoryAdapter(private val itemClick: (Category) -> Unit) :
             binding.tvCategoryName.text = item.name
             binding.ivCategoryImage.load(item.imageUrl) {
                 crossfade(true)
-                error(R.mipmap.ic_launcher)
+                error(R.drawable.img_error)
             }
             if (adapterPosition == selectedCategory) {
                 binding.tvCategoryName.setBackgroundResource(R.drawable.bg_edit_text_secondary)
