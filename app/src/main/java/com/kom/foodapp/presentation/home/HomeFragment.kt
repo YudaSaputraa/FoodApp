@@ -25,6 +25,8 @@ import com.kom.foodapp.data.repository.CategoryRepositoryImpl
 import com.kom.foodapp.data.repository.MenuRepository
 import com.kom.foodapp.data.repository.MenuRepositoryImpl
 import com.kom.foodapp.data.source.local.database.AppDatabase
+import com.kom.foodapp.data.source.network.UserPreference
+import com.kom.foodapp.data.source.network.UserPreferenceImpl
 import com.kom.foodapp.data.source.network.services.FoodAppApiService
 import com.kom.foodapp.databinding.FragmentHomeBinding
 import com.kom.foodapp.presentation.detailmenu.DetailActivity
@@ -36,6 +38,8 @@ import com.kom.foodapp.utils.proceedWhen
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var userPreference: UserPreference
+
 
     private val viewModel: HomeViewModel by viewModels {
         val database = AppDatabase.getInstance(requireContext())
@@ -57,7 +61,7 @@ class HomeFragment : Fragment() {
 
 
     }
-    private var isGridMode: Boolean = true
+
     private var isDarkMode: Boolean = false
     private var menuAdapter: MenuAdapter? = null
 
@@ -78,14 +82,15 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindModeList(true)
+        userPreference = UserPreferenceImpl(requireContext())
+        val isUsingGridMode = userPreference.isUsingGridMode()
+        bindModeList(isUsingGridMode)
+        setClickAction(isUsingGridMode)
+        setIconFromPref(isUsingGridMode)
         getCategoryData()
         getMenuData(null)
         setCategoryData()
-        setClickAction()
         setThemeMode()
-
-
     }
 
     private fun setCategoryData() {
@@ -272,18 +277,26 @@ class HomeFragment : Fragment() {
         )
     }
 
-    private fun setClickAction() {
+    private fun setClickAction(usingGrid: Boolean) {
+        var isGridMode = usingGrid
         binding.ivMenuList.setOnClickListener {
             isGridMode = !isGridMode
             if (isGridMode)
-
                 binding.ivMenuList.setImageResource(R.drawable.ic_menu_list)
             else
                 binding.ivMenuList.setImageResource(R.drawable.ic_menu_grid)
             bindModeList(isGridMode)
+            userPreference.setUsingGridMode(isGridMode)
 
         }
     }
 
+    private fun setIconFromPref(isGridMode: Boolean) {
+        if (isGridMode) {
+            binding.ivMenuList.setImageResource(R.drawable.ic_menu_list)
+        } else {
+            binding.ivMenuList.setImageResource(R.drawable.ic_menu_grid)
+        }
+    }
 
 }
