@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "23969816918",
+    "project_id": "foodapp-authentication-daada",
+    "storage_bucket": "foodapp-authentication-daada.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23969816918:android:81ef1c135ef75d11c6b6f7",
+        "android_client_info": {
+          "package_name": "com.kom.foodapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdzzYll5onHkHqzwkSmD5C6al2sq4vsnQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
