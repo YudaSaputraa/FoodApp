@@ -22,8 +22,10 @@ class HomeViewModel(
         postValue(0.0)
     }
 
-    fun getMenu() = menuRepository.getMenu()
-    fun getCategories() = categoryRepository.getCategories()
+    fun getMenu(categoryName: String? = null) =
+        menuRepository.getMenu(categoryName).asLiveData(Dispatchers.IO)
+
+    fun getCategories() = categoryRepository.getCategories().asLiveData(Dispatchers.IO)
 
     fun addItemToCart(menu: Menu) {
         menuCountLiveData.value = 1

@@ -106,42 +106,59 @@ class CheckoutActivity : AppCompatActivity() {
             result.proceedWhen(
                 doOnSuccess = {
                     binding.layoutState.root.isVisible = false
+                    binding.layoutOnEmptyDataState.root.isVisible = false
                     binding.layoutState.pbLoading.isVisible = false
-                    binding.layoutState.tvError.isVisible = false
+                    binding.layoutOnEmptyDataState.ivOnEmptyData.isVisible = false
+                    binding.layoutOnEmptyDataState.tvOnEmptyData.isVisible = false
                     binding.layoutContent.root.isVisible = true
                     binding.layoutContent.rvItem.isVisible = true
                     binding.layoutButtonOrder.btnAddToCart.isVisible = true
+                    binding.layoutButtonOrder.btnAddToCart.isEnabled = true
                     result.payload?.let { (carts, priceItems, totalPrice) ->
                         adapter.submitData(carts)
                         binding.layoutButtonOrder.tvTotalPrice.text = totalPrice.formatToRupiah()
                         priceItemAdapter.submitData(priceItems)
                     }
-                }, doOnLoading = {
+                },
+                doOnLoading = {
                     binding.layoutState.root.isVisible = true
+                    binding.layoutOnEmptyDataState.root.isVisible = true
                     binding.layoutState.pbLoading.isVisible = true
-                    binding.layoutState.tvError.isVisible = false
+                    binding.layoutOnEmptyDataState.ivOnEmptyData.isVisible = false
+                    binding.layoutOnEmptyDataState.tvOnEmptyData.isVisible = false
                     binding.layoutContent.root.isVisible = false
                     binding.layoutContent.rvItem.isVisible = false
-                    binding.layoutButtonOrder.btnAddToCart.isVisible = false
-                }, doOnError = {
+                    binding.layoutButtonOrder.btnAddToCart.isEnabled = false
+                    binding.layoutButtonOrder.tvTotalPrice.text =
+                        getString(R.string.text_empty_price)
+
+                },
+                doOnError = {
                     binding.layoutState.root.isVisible = true
+                    binding.layoutOnEmptyDataState.root.isVisible = true
                     binding.layoutState.pbLoading.isVisible = false
-                    binding.layoutState.tvError.isVisible = true
-                    binding.layoutState.tvError.text = result.exception?.message.orEmpty()
+                    binding.layoutOnEmptyDataState.ivOnEmptyData.isVisible = true
+                    binding.layoutOnEmptyDataState.tvOnEmptyData.isVisible = true
+                    binding.layoutOnEmptyDataState.tvOnEmptyData.text =
+                        result.exception?.message.orEmpty()
                     binding.layoutContent.root.isVisible = false
                     binding.layoutContent.rvItem.isVisible = false
-                    binding.layoutButtonOrder.btnAddToCart.isVisible = false
-                }, doOnEmpty = { data ->
+                    binding.layoutButtonOrder.btnAddToCart.isEnabled = false
+                },
+                doOnEmpty = { data ->
                     binding.layoutState.root.isVisible = true
+                    binding.layoutOnEmptyDataState.root.isVisible = true
                     binding.layoutState.pbLoading.isVisible = false
-                    binding.layoutState.tvError.isVisible = true
-                    binding.layoutState.tvError.text = getString(R.string.text_empty_cart)
+                    binding.layoutOnEmptyDataState.ivOnEmptyData.isVisible = true
+                    binding.layoutOnEmptyDataState.tvOnEmptyData.isVisible = true
+                    binding.layoutOnEmptyDataState.tvOnEmptyData.text =
+                        getString(R.string.text_on_cart_empty)
                     data.payload?.let { (_, _, totalPrice) ->
                         binding.layoutButtonOrder.tvTotalPrice.text = totalPrice.formatToRupiah()
                     }
                     binding.layoutContent.root.isVisible = false
                     binding.layoutContent.rvItem.isVisible = false
-                    binding.layoutButtonOrder.btnAddToCart.isVisible = false
+                    binding.layoutButtonOrder.btnAddToCart.isEnabled = false
                 })
         }
     }

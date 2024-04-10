@@ -86,24 +86,34 @@ class CartFragment : Fragment() {
             result.proceedWhen(
                 doOnLoading = {
                     binding.layoutState.root.isVisible = true
+                    binding.layoutOnEmptyDataState.root.isVisible = true
                     binding.layoutState.pbLoading.isVisible = true
-                    binding.layoutState.tvError.isVisible = false
+                    binding.layoutOnEmptyDataState.ivOnEmptyData.isVisible = false
+                    binding.layoutOnEmptyDataState.tvOnEmptyData.isVisible = false
                     binding.layoutBtnTotal.btnOrder.isEnabled = false
                     binding.rvCart.isVisible = false
+                    binding.layoutBtnTotal.tvTotalPrice.text = getString(R.string.text_empty_price)
                 },
                 doOnError = {
                     binding.layoutState.root.isVisible = true
+                    binding.layoutOnEmptyDataState.root.isVisible = true
                     binding.layoutState.pbLoading.isVisible = false
-                    binding.layoutState.tvError.isVisible = true
                     binding.layoutBtnTotal.btnOrder.isEnabled = false
-                    binding.layoutState.tvError.text = result.exception?.message.orEmpty()
+                    binding.layoutOnEmptyDataState.tvOnEmptyData.isVisible = true
+                    binding.layoutOnEmptyDataState.ivOnEmptyData.isVisible = true
+                    binding.layoutOnEmptyDataState.tvOnEmptyData.text =
+                        result.exception?.message.orEmpty()
+
                     binding.rvCart.isVisible = false
                 },
                 doOnEmpty = {
                     binding.layoutState.root.isVisible = true
+                    binding.layoutOnEmptyDataState.root.isVisible = true
                     binding.layoutState.pbLoading.isVisible = false
-                    binding.layoutState.tvError.isVisible = true
-                    binding.layoutState.tvError.text = getString(R.string.text_empty_cart)
+                    binding.layoutOnEmptyDataState.ivOnEmptyData.isVisible = true
+                    binding.layoutOnEmptyDataState.tvOnEmptyData.isVisible = true
+                    binding.layoutOnEmptyDataState.tvOnEmptyData.text =
+                        getString(R.string.text_on_cart_empty)
                     binding.rvCart.isVisible = false
                     binding.layoutBtnTotal.btnOrder.isEnabled = false
                     result.payload?.let { (carts, totalPrice) ->
@@ -112,9 +122,10 @@ class CartFragment : Fragment() {
                 },
                 doOnSuccess = {
                     binding.layoutState.root.isVisible = false
+                    binding.layoutOnEmptyDataState.root.isVisible = false
                     binding.layoutState.pbLoading.isVisible = false
-                    binding.layoutState.tvError.isVisible = false
-                    binding.layoutState.tvError.text = getString(R.string.text_empty_cart)
+                    binding.layoutOnEmptyDataState.ivOnEmptyData.isVisible = false
+                    binding.layoutOnEmptyDataState.tvOnEmptyData.isVisible = false
                     binding.rvCart.isVisible = true
                     binding.layoutBtnTotal.btnOrder.isEnabled = true
                     result.payload?.let { (carts, totalPrice) ->

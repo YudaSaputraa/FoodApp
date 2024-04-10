@@ -60,4 +60,15 @@
         android:layout_height="wrap_content" />
 
 
+    <include
+        android:id="@+id/layout_on_empty_data_state"
+        layout="@layout/layout_on_empty_data"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/layout_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

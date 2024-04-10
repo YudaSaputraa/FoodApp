@@ -34,7 +34,7 @@ class ProfileFragment : Fragment() {
         profileViewModel.profileData.observe(viewLifecycleOwner, Observer { profile ->
             binding.layoutProfile.ivProfile.load(profile.image) {
                 crossfade(true)
-                error(R.mipmap.ic_launcher)
+                error(R.drawable.img_error)
             }
             binding.layoutProfile.editTextUsername.setText(profile.name)
             binding.layoutProfile.editTextEmail.setText(profile.email)
