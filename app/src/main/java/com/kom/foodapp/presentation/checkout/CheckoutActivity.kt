@@ -9,20 +9,30 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.kom.foodapp.R
+import com.kom.foodapp.data.datasource.authentication.AuthDataSource
+import com.kom.foodapp.data.datasource.authentication.FirebaseAuthDataSource
 import com.kom.foodapp.data.datasource.cart.CartDataSource
 import com.kom.foodapp.data.datasource.cart.CartDatabaseDataSource
 import com.kom.foodapp.data.repository.CartRepository
 import com.kom.foodapp.data.repository.CartRepositoryImpl
+import com.kom.foodapp.data.repository.UserRepository
+import com.kom.foodapp.data.repository.UserRepositoryImpl
+import com.kom.foodapp.data.source.firebase.FirebaseService
+import com.kom.foodapp.data.source.firebase.FirebaseServiceImpl
 import com.kom.foodapp.data.source.local.database.AppDatabase
 import com.kom.foodapp.databinding.ActivityCheckoutBinding
 import com.kom.foodapp.presentation.checkout.adapter.PriceListAdapter
 import com.kom.foodapp.presentation.common.adapter.CartListAdapter
+import com.kom.foodapp.presentation.login.LoginActivity
 import com.kom.foodapp.presentation.main.MainActivity
 import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.formatToRupiah
 import com.kom.foodapp.utils.proceedWhen
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -36,8 +46,11 @@ class CheckoutActivity : AppCompatActivity() {
         val database = AppDatabase.getInstance(this)
         val dataSource: CartDataSource = CartDatabaseDataSource(database.cartDao())
         val cartRepository: CartRepository = CartRepositoryImpl(dataSource)
+        val service: FirebaseService = FirebaseServiceImpl()
+        val authDataSource: AuthDataSource = FirebaseAuthDataSource(service)
+        val userRepository: UserRepository = UserRepositoryImpl(authDataSource)
         GenericViewModelFactory.create(
-            CheckoutViewModel(cartRepository)
+            CheckoutViewModel(cartRepository, userRepository)
         )
     }
 
@@ -56,7 +69,21 @@ class CheckoutActivity : AppCompatActivity() {
         observeData()
         setActionListener()
         setActionOnSuccess()
+        checkUserLoginStatus()
+    }
+    private fun checkUserLoginStatus() {
+        lifecycleScope.launch {
+            if (!viewModel.isUserLoggedIn()) {
+                navigateToLogin()
+            }
+        }
+    }
 
+
+    private fun navigateToLogin() {
+        startActivity(Intent(this, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        })
     }
 
     private fun setActionOnSuccess() {

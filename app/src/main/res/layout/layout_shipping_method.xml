@@ -11,7 +11,7 @@
         android:id="@+id/tv_shipping_method"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/font_poppins_semibold"
+        android:fontFamily="@font/font_open_sans_semi_bold"
         android:text="@string/text_shipping_method_title"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,7 +37,7 @@
             android:layout_weight="1"
             android:background="@drawable/radio_selector_left"
             android:button="@drawable/bg_rounded_border_transparent"
-            android:fontFamily="@font/font_poppins_semibold"
+            android:fontFamily="@font/font_open_sans_semi_bold"
             android:text="@string/text_radio_pickup"
             android:textAlignment="center"
             android:textColor="@drawable/radio_text_color_selected" />
@@ -49,7 +49,7 @@
             android:background="@drawable/radio_selector_right"
             android:layout_weight="1"
             android:button="@drawable/bg_rounded_border_transparent"
-            android:fontFamily="@font/font_poppins_semibold"
+            android:fontFamily="@font/font_open_sans_semi_bold"
             android:text="@string/text_radio_delivery"
             android:textAlignment="center"
             android:textColor="@drawable/radio_text_color_selected" />

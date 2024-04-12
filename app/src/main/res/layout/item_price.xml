@@ -25,7 +25,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:fontFamily="@font/font_poppins_semibold"
+        android:fontFamily="@font/font_open_sans_semi_bold"
         android:textAlignment="textEnd"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
