@@ -6,6 +6,7 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -43,18 +44,35 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setLoginForm()
+        setClickListeners()
 
     }
 
     private fun setClickListeners() {
-        with(binding) {
-            btnLogin.setOnClickListener {
-                doLogin()
-            }
-            binding.tvNotHaveAccount.highLightWord("Login") {
-                navigateToRegister()
-            }
+
+        binding.btnLogin.setOnClickListener {
+            doLogin()
         }
+        binding.tvNotHaveAccount.highLightWord(getString(R.string.text_register)) {
+            navigateToRegister()
+        }
+
+        binding.tvForgetPassword.setOnClickListener {
+            requestChangePassword()
+        }
+
+    }
+
+    private fun requestChangePassword() {
+        //todo : do change password
+        val dialog = AlertDialog.Builder(this)
+            .setMessage("Permintaan perubahan kata sandi telah dikirim ke email Anda. Silakan cek di kotak masuk atau folder spam.\"")
+            .setPositiveButton(
+                "Oke"
+            ) { dialog, id ->
+
+            }.create()
+        dialog.show()
     }
 
     private fun navigateToRegister() {

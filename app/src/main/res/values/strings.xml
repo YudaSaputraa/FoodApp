@@ -80,7 +80,7 @@
     <string name="text_on_cart_empty">Keranjangmu kosong!</string>
     <string name="text_category_on_empty">Data kategory kosong!</string>
     <string name="text_empty_price">-</string>
-    <string name="text_register">Register</string>
+    <string name="text_register">Daftar</string>
     <string name="text_hint_username">Username</string>
     <string name="text_hint_email">Email</string>
     <string name="text_hint_password">Password</string>
@@ -92,7 +92,7 @@
     <string name="text_already_have_account">Sudah punya akun?. Login</string>
     <string name="text_sub_register">Daftarkan dirimu dan nikmati kemudahan dalam memesan makanan.</string>
     <string name="text_login">Masuk</string>
-    <string name="tv_not_have_account">Belum punya akun?. Daftar</string>
+    <string name="tv_not_have_account">Belum punya akun? Daftar</string>
     <string name="text_full_name">Nama Lengkap</string>
     <string name="text_hint_full_name">Nama Lengkap</string>
     <string name="text_fullname_cannot_empty">Nama lengkap tidak boleh kosong!</string>
@@ -104,4 +104,7 @@
     <string name="text_password_doesnt_match">Kata sandi tidak cocok!</string>
     <string name="text_login_failed">Login Gagal! : %1$s</string>
     <string name="text_register_failed">Register Gagal! : %1$s</string>
+    <string name="text_forget_password">Lupa password?</string>
+    <string name="text_logout">Logout</string>
+    <string name="text_change_password">Ganti Password</string>
 </resources>

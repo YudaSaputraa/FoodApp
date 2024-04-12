@@ -49,6 +49,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_sub_login" />
 
+    <TextView
+        android:id="@+id/tv_forget_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
+        android:textColor="#1A4BFF"
+        android:text="@string/text_forget_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_form" />
+
     <FrameLayout
         android:id="@+id/fl_btn_login"
         android:layout_width="match_parent"
@@ -56,14 +67,14 @@
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_form">
+        app:layout_constraintTop_toBottomOf="@id/tv_forget_password">
 
         <Button
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_rounded"
-            android:text="@string/text_register"
+            android:text="@string/text_login"
             android:textSize="16sp" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator

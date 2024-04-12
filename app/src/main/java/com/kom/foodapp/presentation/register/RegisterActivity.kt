@@ -50,7 +50,7 @@ class RegisterActivity : AppCompatActivity() {
             btnRegister.setOnClickListener {
                 doRegister()
             }
-            binding.tvNotHaveAccount.highLightWord("Login"){
+            tvNotHaveAccount.highLightWord("Login") {
                 navigateToLogin()
             }
         }
@@ -66,16 +66,17 @@ class RegisterActivity : AppCompatActivity() {
         val fullName = binding.layoutForm.etFullName.text.toString().trim()
         val username = binding.layoutForm.etUsername.text.toString().trim()
         val email = binding.layoutForm.etEmail.text.toString().trim()
-        val phoneNumber = binding.layoutForm.etPhoneNumber.toString().trim()
-        val password = binding.layoutForm.etPassword.toString().trim()
-        val confirmPassword = binding.layoutForm.etConfirmPassword.toString().trim()
+        val phoneNumber = binding.layoutForm.etPhoneNumber.text.toString().trim()
+        val password = binding.layoutForm.etPassword.text.toString().trim()
+        val confirmPassword = binding.layoutForm.etConfirmPassword.text.toString().trim()
 
         return fullNameValidation(fullName) &&
                 usernameValidation(username) &&
                 emailValidation(email) &&
                 phoneNumberValidation(phoneNumber) &&
                 passwordValidation(password, binding.layoutForm.tilPassword) &&
-                passwordValidation(confirmPassword, binding.layoutForm.tilConfirmPassword)
+                passwordValidation(confirmPassword, binding.layoutForm.tilConfirmPassword) &&
+                passwordAndConfirmPasswordValidation(password, confirmPassword)
     }
 
     private fun doRegister() {
@@ -86,6 +87,7 @@ class RegisterActivity : AppCompatActivity() {
             val phoneNumber = binding.layoutForm.etPhoneNumber.toString().trim()
             val password = binding.layoutForm.etPassword.toString().trim()
             registerProcess(fullName, username, email, phoneNumber, password)
+            navigateToLogin()
         }
     }
 
@@ -214,17 +216,17 @@ class RegisterActivity : AppCompatActivity() {
         password: String,
         confirmPassword: String
     ): Boolean {
-        return if (password != confirmPassword) {
+        return if (password == confirmPassword) {
+            binding.layoutForm.tilPassword.isErrorEnabled = false
+            binding.layoutForm.tilConfirmPassword.isErrorEnabled = false
+            true
+        } else {
             binding.layoutForm.tilPassword.isErrorEnabled = true
             binding.layoutForm.tilPassword.error = getString(R.string.text_password_doesnt_match)
             binding.layoutForm.tilConfirmPassword.isErrorEnabled = true
             binding.layoutForm.tilConfirmPassword.error =
                 getString(R.string.text_password_doesnt_match)
             false
-        } else {
-            binding.layoutForm.tilPassword.isErrorEnabled = false
-            binding.layoutForm.tilConfirmPassword.isErrorEnabled = false
-            true
         }
     }
 
