@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ellipsize="end"
-            android:fontFamily="@font/font_poppins_medium"
+            android:fontFamily="@font/font_open_sans_medium"
             android:maxLines="1"
             android:text="@string/text_menu_name"
             android:textSize="14sp"

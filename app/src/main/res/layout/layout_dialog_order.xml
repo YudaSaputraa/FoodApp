@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="8dp"
-            android:fontFamily="@font/font_poppins_semibold"
+            android:fontFamily="@font/font_open_sans_semi_bold"
             android:text="@string/text_total_price_cart"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"

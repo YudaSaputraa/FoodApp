@@ -107,4 +107,5 @@
     <string name="text_forget_password">Lupa password?</string>
     <string name="text_logout">Logout</string>
     <string name="text_change_password">Ganti Password</string>
+    <string name="text_sub_login">Masuk untuk mengakses lebih banyak fitur.</string>
 </resources>
