@@ -20,7 +20,7 @@
         <item name="colorOnErrorContainer">@color/dark_on_error_container</item>
     </style>
 
-    <style name="RoundedImageViewCategory" parent="">
+    <style name="RoundedImageViewCircle" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>

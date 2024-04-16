@@ -42,7 +42,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
                 android:background="@android:color/transparent"
                 android:ellipsize="end"
                 android:hint="@string/text_hint_search_bar"
