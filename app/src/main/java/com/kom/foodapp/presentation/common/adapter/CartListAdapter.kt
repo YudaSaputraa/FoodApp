@@ -86,6 +86,7 @@ class CartViewHolder(
 
     }
 
+
     private fun setCartData(item: Cart) {
         with(binding) {
             binding.ivMenuImg.load(item.menuImgUrl) {

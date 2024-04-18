@@ -16,7 +16,7 @@ interface AuthDataSource {
 
 
     @Throws(exceptionClasses = [Exception::class])
-    suspend fun doRegister(fullName : String, username:String, phoneNumber : String, email : String, password : String) : Boolean
+    suspend fun doRegister(fullName : String, email : String, password : String) : Boolean
 
      @Throws(exceptionClasses = [Exception::class])
     suspend fun updateProfile(fullName : String? = null) : Boolean
@@ -44,12 +44,10 @@ class FirebaseAuthDataSource(private val service: FirebaseService) : AuthDataSou
 
     override suspend fun doRegister(
         fullName: String,
-        username: String,
-        phoneNumber: String,
         email: String,
         password: String
     ): Boolean {
-        return service.doRegister(fullName, username, phoneNumber, email, password)
+        return service.doRegister(fullName, email, password)
     }
 
     override suspend fun updateProfile(fullName: String?): Boolean {

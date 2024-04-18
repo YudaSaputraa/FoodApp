@@ -64,16 +64,12 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun isFormValid(): Boolean {
         val fullName = binding.layoutForm.etFullName.text.toString().trim()
-        val username = binding.layoutForm.etUsername.text.toString().trim()
         val email = binding.layoutForm.etEmail.text.toString().trim()
-        val phoneNumber = binding.layoutForm.etPhoneNumber.text.toString().trim()
         val password = binding.layoutForm.etPassword.text.toString().trim()
         val confirmPassword = binding.layoutForm.etConfirmPassword.text.toString().trim()
 
         return fullNameValidation(fullName) &&
-                usernameValidation(username) &&
                 emailValidation(email) &&
-                phoneNumberValidation(phoneNumber) &&
                 passwordValidation(password, binding.layoutForm.tilPassword) &&
                 passwordValidation(confirmPassword, binding.layoutForm.tilConfirmPassword) &&
                 passwordAndConfirmPasswordValidation(password, confirmPassword)
@@ -82,23 +78,19 @@ class RegisterActivity : AppCompatActivity() {
     private fun doRegister() {
         if (isFormValid()) {
             val fullName = binding.layoutForm.etFullName.text.toString().trim()
-            val username = binding.layoutForm.etUsername.text.toString().trim()
             val email = binding.layoutForm.etEmail.text.toString().trim()
-            val phoneNumber = binding.layoutForm.etPhoneNumber.toString().trim()
-            val password = binding.layoutForm.etPassword.toString().trim()
-            registerProcess(fullName, username, email, phoneNumber, password)
+            val password = binding.layoutForm.etPassword.text.toString().trim()
+            registerProcess(fullName, email, password)
             navigateToLogin()
         }
     }
 
     private fun registerProcess(
         fullName: String,
-        username: String,
         email: String,
-        phoneNumber: String,
         password: String
     ) {
-        viewModel.doRegister(fullName, username, phoneNumber, email, password)
+        viewModel.doRegister(fullName, email, password)
             .observe(this) { result ->
                 result.proceedWhen(
                     doOnSuccess = {
@@ -137,9 +129,7 @@ class RegisterActivity : AppCompatActivity() {
     private fun setRegisterForm() {
         with(binding.layoutForm) {
             tilFullName.isVisible = true
-            tilUsername.isVisible = true
             tilEmail.isVisible = true
-            tilPhoneNumber.isVisible = true
             tilPassword.isVisible = true
             tilConfirmPassword.isVisible = true
 
@@ -157,27 +147,6 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun usernameValidation(username: String): Boolean {
-        return if (username.isEmpty()) {
-            binding.layoutForm.tilUsername.isErrorEnabled = true
-            binding.layoutForm.tilUsername.error = getString(R.string.text_username_cannot_empty)
-            false
-        } else {
-            binding.layoutForm.tilUsername.isErrorEnabled = false
-            true
-        }
-    }
-
-    private fun phoneNumberValidation(phoneNumber: String): Boolean {
-        return if (phoneNumber.isEmpty()) {
-            binding.layoutForm.tilPhoneNumber.isErrorEnabled = true
-            binding.layoutForm.tilPhoneNumber.error = getString(R.string.text_username_cannot_empty)
-            false
-        } else {
-            binding.layoutForm.tilPhoneNumber.isErrorEnabled = false
-            true
-        }
-    }
 
     private fun emailValidation(email: String): Boolean {
         return if (email.isEmpty()) {

@@ -19,8 +19,6 @@ interface UserRepository {
     @Throws(exceptionClasses = [Exception::class])
     fun doRegister(
         fullName: String,
-        username: String,
-        phoneNumber: String,
         email: String,
         password: String
     ): Flow<ResultWrapper<Boolean>>
@@ -48,12 +46,10 @@ class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepositor
 
     override fun doRegister(
         fullName: String,
-        username: String,
-        phoneNumber: String,
         email: String,
         password: String
     ): Flow<ResultWrapper<Boolean>> {
-        return proceedFlow { dataSource.doRegister(fullName, username, phoneNumber, email, password) }
+        return proceedFlow { dataSource.doRegister(fullName, email, password) }
     }
 
     override fun updateProfile(fullName: String?): Flow<ResultWrapper<Boolean>> {

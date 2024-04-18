@@ -18,12 +18,9 @@ interface FirebaseService {
     @Throws(exceptionClasses = [Exception::class])
     suspend fun doLogin(email: String, password: String): Boolean
 
-
     @Throws(exceptionClasses = [Exception::class])
     suspend fun doRegister(
         fullName: String,
-        username: String,
-        phoneNumber: String,
         email: String,
         password: String
     ): Boolean
@@ -47,8 +44,6 @@ class FirebaseServiceImpl() : FirebaseService {
 
     override suspend fun doRegister(
         fullName: String,
-        username: String,
-        phoneNumber: String,
         email: String,
         password: String
     ): Boolean {
