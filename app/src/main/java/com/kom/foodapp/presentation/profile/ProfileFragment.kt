@@ -49,18 +49,9 @@ class ProfileFragment : Fragment() {
         editProfile()
         setClickListener()
         loggedOut()
-        checkUserLoginStatus()
         profileViewModel.fetchProfileData()
         observeProfileData()
 
-    }
-
-    private fun checkUserLoginStatus() {
-        lifecycleScope.launch {
-            if (!viewModel.isUserLoggedIn()) {
-                navigateToLogin()
-            }
-        }
     }
 
     private fun observeProfileData() {
@@ -85,7 +76,7 @@ class ProfileFragment : Fragment() {
 
     private fun navigateToLogin() {
         startActivity(Intent(requireContext(), LoginActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         })
     }
 

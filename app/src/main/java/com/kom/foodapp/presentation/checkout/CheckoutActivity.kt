@@ -24,6 +24,7 @@ import com.kom.foodapp.data.source.firebase.FirebaseService
 import com.kom.foodapp.data.source.firebase.FirebaseServiceImpl
 import com.kom.foodapp.data.source.local.database.AppDatabase
 import com.kom.foodapp.databinding.ActivityCheckoutBinding
+import com.kom.foodapp.databinding.LayoutDialogOrderBinding
 import com.kom.foodapp.presentation.checkout.adapter.PriceListAdapter
 import com.kom.foodapp.presentation.common.adapter.CartListAdapter
 import com.kom.foodapp.presentation.login.LoginActivity
@@ -71,6 +72,7 @@ class CheckoutActivity : AppCompatActivity() {
         setActionOnSuccess()
         checkUserLoginStatus()
     }
+
     private fun checkUserLoginStatus() {
         lifecycleScope.launch {
             if (!viewModel.isUserLoggedIn()) {
@@ -91,29 +93,7 @@ class CheckoutActivity : AppCompatActivity() {
             result.proceedWhen(
                 doOnSuccess = {
                     binding.layoutButtonOrder.btnAddToCart.setOnClickListener {
-
-                        val dialog = Dialog(this)
-                        dialog.setContentView(R.layout.layout_dialog_order)
-                        val layoutParams = WindowManager.LayoutParams()
-                        layoutParams.copyFrom(dialog.window?.attributes)
-                        dialog.window?.attributes = layoutParams
-                        val currentDateAndTime =
-                            SimpleDateFormat("dd MMMM yyyy HH:mm:ss").format(Date())
-                        val tvDateTime = dialog.findViewById<TextView>(R.id.tv_date_time)
-                        tvDateTime.text = currentDateAndTime
-
-                        val rvSummaryOrder =
-                            dialog.findViewById<RecyclerView>(R.id.rv_summary_order)
-                        rvSummaryOrder.adapter = priceItemAdapter
-                        val buttonClose = dialog.findViewById<Button>(R.id.btn_back_on_success)
-                        dialog.show()
-                        buttonClose.setOnClickListener {
-                            viewModel.deleteAllCarts()
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                            dialog.dismiss()
-                            finish()
-                        }
+                        showOrderSuccessDialog()
 
                     }
                 }
@@ -121,6 +101,24 @@ class CheckoutActivity : AppCompatActivity() {
 
         }
     }
+
+    private fun showOrderSuccessDialog() {
+        val dialog = Dialog(this)
+        val dialogBinding = LayoutDialogOrderBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        val currentDateAndTime =
+            SimpleDateFormat("dd MMMM yyyy HH:mm:ss").format(Date())
+        dialogBinding.tvDateTime.text = currentDateAndTime
+        dialogBinding.rvSummaryOrder.adapter = priceItemAdapter
+        dialog.show()
+        dialogBinding.btnBackOnSuccess.setOnClickListener {
+            viewModel.deleteAllCarts()
+            dialog.dismiss()
+            finish()
+        }
+    }
+
 
     private fun setActionListener() {
         binding.layoutHeader.ivBack.setOnClickListener {

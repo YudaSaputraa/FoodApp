@@ -12,12 +12,10 @@ Github : https://github.com/YudaSaputraa
 class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
     fun doRegister(
         fullName: String,
-        username: String,
-        phoneNumber: String,
         email: String,
         password: String
     ) =
         repository
-            .doRegister(fullName, username, phoneNumber, email, password)
+            .doRegister(fullName, email, password)
             .asLiveData(Dispatchers.IO)
 }

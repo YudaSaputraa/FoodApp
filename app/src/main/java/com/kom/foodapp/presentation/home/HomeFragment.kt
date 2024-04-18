@@ -88,7 +88,6 @@ class HomeFragment : Fragment() {
         setClickAction(isUsingGridMode)
         setIconFromPref(isUsingGridMode)
         getCategoryData()
-        getMenuData(null)
         setCategoryData()
         setThemeMode()
     }
