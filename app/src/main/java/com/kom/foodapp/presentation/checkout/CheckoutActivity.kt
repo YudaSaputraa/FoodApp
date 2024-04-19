@@ -92,7 +92,7 @@ class CheckoutActivity : AppCompatActivity() {
 
     private fun navigateToLogin() {
         startActivity(Intent(this, LoginActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
         })
     }
 

@@ -1,5 +1,6 @@
 package com.kom.foodapp.presentation.home
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -70,13 +71,14 @@ class HomeFragment : Fragment() {
 
     private var isDarkMode: Boolean = false
     private var menuAdapter: MenuAdapter? = null
+    private var categories: List<Category>? = null
+    private var menuItems: List<Menu>? = null
 
     private val categoryAdapter: CategoryAdapter by lazy {
         CategoryAdapter {
             getMenuData(it.name)
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -93,18 +95,33 @@ class HomeFragment : Fragment() {
         bindModeList(isUsingGridMode)
         setClickAction(isUsingGridMode)
         setIconFromPref(isUsingGridMode)
-        getCategoryData()
         setCategoryData()
+        loadCategoriesData()
+        loadMenuData()
         setThemeMode()
         setDisplayName()
     }
 
-    private fun setDisplayName() {
-        val currentUser = viewModel.getCurrentUser()
-        binding.layoutHeader.tvName.text =
-            getString(R.string.text_display_name, currentUser?.fullName)
+    private fun loadMenuData() {
+        menuItems?.let { bindMenu(it) } ?: getMenuData()
     }
 
+    private fun loadCategoriesData() {
+        categories?.let { bindCategory(it) } ?: getCategoryData()
+    }
+
+    private fun setDisplayName() {
+        if (!viewModel.userIsLoggedIn()) {
+            binding.layoutHeader.tvName.apply {
+                text = getString(R.string.text_user_not_login)
+                setTypeface(null, Typeface.ITALIC)
+            }
+        } else {
+            val currentUser = viewModel.getCurrentUser()
+            binding.layoutHeader.tvName.text =
+                getString(R.string.text_display_name, currentUser?.fullName)
+        }
+    }
 
     private fun setCategoryData() {
         binding.rvCategory.apply {
@@ -122,7 +139,10 @@ class HomeFragment : Fragment() {
                     binding.layoutOnEmptyDataState.ivOnEmptyData.isVisible = false
                     binding.layoutOnEmptyDataState.tvOnEmptyData.isVisible = false
                     binding.rvMenu.isVisible = true
-                    it.payload?.let { data -> bindMenu(data) }
+                    it.payload?.let { data ->
+                        menuItems = data
+                        bindMenu(data)
+                    }
                 },
                 doOnError = {
                     binding.layoutState.root.isVisible = true
@@ -165,7 +185,6 @@ class HomeFragment : Fragment() {
                 R.id.layout_on_empty_data_state_category,
                 ConstraintSet.BOTTOM
             )
-
         } else {
             constraintSet.connect(
                 R.id.tv_menu_title,
@@ -174,7 +193,6 @@ class HomeFragment : Fragment() {
                 ConstraintSet.BOTTOM
             )
         }
-
         constraintSet.applyTo(binding.clContent)
     }
 
@@ -189,7 +207,10 @@ class HomeFragment : Fragment() {
                     binding.layoutOnEmptyDataStateCategory.ivOnEmptyData.isVisible = false
                     binding.layoutOnEmptyDataStateCategory.tvOnEmptyData.isVisible = false
                     binding.rvCategory.isVisible = true
-                    it.payload?.let { data -> bindCategory(data) }
+                    it.payload?.let { data ->
+                        categories = data
+                        bindCategory(data)
+                    }
                     setMenuTitleConstraint(false)
                 },
                 doOnError = {
@@ -273,14 +294,16 @@ class HomeFragment : Fragment() {
                     1
             )
         }
-        getMenuData(null)
+        setMenuTitleConstraint(false)
     }
 
     private fun bindCategory(categories: List<Category>) {
+        this.categories = categories
         categoryAdapter.submitData(categories)
     }
 
     private fun bindMenu(menu: List<Menu>) {
+        this.menuItems = menu
         menuAdapter?.submitData(menu)
     }
 
@@ -299,8 +322,8 @@ class HomeFragment : Fragment() {
             else
                 binding.ivMenuList.setImageResource(R.drawable.ic_menu_grid)
             bindModeList(isGridMode)
+            loadMenuData()
             userPreference.setUsingGridMode(isGridMode)
-
         }
     }
 

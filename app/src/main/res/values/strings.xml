@@ -116,4 +116,5 @@
     <string name="text_error_when_same_fullname">Nama tidak boleh sama!</string>
     <string name="text_success_edit_profile">Perubahan disimpan!</string>
     <string name="text_confirm_edit_profile_data">Anda yakin ingin mengubah data ?</string>
+    <string name="text_user_not_login">Anda belum login!</string>
 </resources>
