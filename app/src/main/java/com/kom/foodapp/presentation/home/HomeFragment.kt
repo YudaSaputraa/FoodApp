@@ -1,5 +1,6 @@
 package com.kom.foodapp.presentation.home
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -79,7 +80,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -111,11 +111,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun setDisplayName() {
-        val currentUser = viewModel.getCurrentUser()
-        binding.layoutHeader.tvName.text =
-            getString(R.string.text_display_name, currentUser?.fullName)
+        if (!viewModel.userIsLoggedIn()) {
+            binding.layoutHeader.tvName.apply {
+                text = getString(R.string.text_user_not_login)
+                setTypeface(null, Typeface.ITALIC)
+            }
+        } else {
+            val currentUser = viewModel.getCurrentUser()
+            binding.layoutHeader.tvName.text =
+                getString(R.string.text_display_name, currentUser?.fullName)
+        }
     }
-
 
     private fun setCategoryData() {
         binding.rvCategory.apply {
@@ -187,7 +193,6 @@ class HomeFragment : Fragment() {
                 ConstraintSet.BOTTOM
             )
         }
-
         constraintSet.applyTo(binding.clContent)
     }
 
@@ -289,8 +294,7 @@ class HomeFragment : Fragment() {
                     1
             )
         }
-        loadMenuData()
-        setMenuTitleConstraint(true)
+        setMenuTitleConstraint(false)
     }
 
     private fun bindCategory(categories: List<Category>) {
@@ -318,8 +322,8 @@ class HomeFragment : Fragment() {
             else
                 binding.ivMenuList.setImageResource(R.drawable.ic_menu_grid)
             bindModeList(isGridMode)
+            loadMenuData()
             userPreference.setUsingGridMode(isGridMode)
-
         }
     }
 

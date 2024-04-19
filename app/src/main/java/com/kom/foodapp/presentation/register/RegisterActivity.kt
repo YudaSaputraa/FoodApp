@@ -112,7 +112,8 @@ class RegisterActivity : AppCompatActivity() {
                     },
                     doOnLoading = {
                         binding.pbLoading.isVisible = true
-                        binding.btnRegister.isVisible = false
+                        binding.btnRegister.text = ""
+                        binding.btnRegister.isEnabled = false
                     }
                 )
 

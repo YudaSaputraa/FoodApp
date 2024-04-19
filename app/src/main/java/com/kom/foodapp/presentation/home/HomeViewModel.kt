@@ -51,4 +51,5 @@ class HomeViewModel(
     }
 
     fun getCurrentUser() = userRepository.getCurrentUser()
+    fun userIsLoggedIn() = userRepository.isLoggedIn()
 }

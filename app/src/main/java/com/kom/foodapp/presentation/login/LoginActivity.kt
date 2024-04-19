@@ -110,7 +110,8 @@ class LoginActivity : AppCompatActivity() {
                 },
                 doOnLoading = {
                     binding.pbLoading.isVisible = true
-                    binding.btnLogin.isVisible = false
+                    binding.btnLogin.text = ""
+                    binding.btnLogin.isEnabled = false
                 }
             )
         }
