@@ -14,4 +14,6 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
         repository
             .doLogin(email, password)
             .asLiveData(Dispatchers.IO)
+
+    fun doRequestResetPasswordByEmail() = repository.reqChangePasswordByEmail()
 }

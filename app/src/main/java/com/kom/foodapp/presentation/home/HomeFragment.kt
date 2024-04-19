@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.kom.foodapp.R
+import com.kom.foodapp.data.datasource.authentication.AuthDataSource
+import com.kom.foodapp.data.datasource.authentication.FirebaseAuthDataSource
 import com.kom.foodapp.data.datasource.cart.CartDataSource
 import com.kom.foodapp.data.datasource.cart.CartDatabaseDataSource
 import com.kom.foodapp.data.datasource.category.CategoryApiDataSource
@@ -24,6 +26,10 @@ import com.kom.foodapp.data.repository.CategoryRepository
 import com.kom.foodapp.data.repository.CategoryRepositoryImpl
 import com.kom.foodapp.data.repository.MenuRepository
 import com.kom.foodapp.data.repository.MenuRepositoryImpl
+import com.kom.foodapp.data.repository.UserRepository
+import com.kom.foodapp.data.repository.UserRepositoryImpl
+import com.kom.foodapp.data.source.firebase.FirebaseService
+import com.kom.foodapp.data.source.firebase.FirebaseServiceImpl
 import com.kom.foodapp.data.source.local.database.AppDatabase
 import com.kom.foodapp.data.source.local.pref.UserPreference
 import com.kom.foodapp.data.source.local.pref.UserPreferenceImpl
@@ -43,18 +49,21 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels {
         val database = AppDatabase.getInstance(requireContext())
         val apiService = FoodAppApiService.invoke()
+        val service: FirebaseService = FirebaseServiceImpl()
         val menuDataSource: MenuDataSource = MenuApiDataSource(apiService)
         val cartDataSource: CartDataSource = CartDatabaseDataSource(database.cartDao())
-        val menuRepository: MenuRepository = MenuRepositoryImpl(menuDataSource)
+        val authDataSource: AuthDataSource = FirebaseAuthDataSource(service)
+        val userRepository: UserRepository = UserRepositoryImpl(authDataSource)
+        val menuRepository: MenuRepository = MenuRepositoryImpl(menuDataSource, userRepository)
         val categoryDataSource: CategoryDataSource = CategoryApiDataSource(apiService)
         val categoryRepository: CategoryRepository = CategoryRepositoryImpl(categoryDataSource)
         val cartRepository = CartRepositoryImpl(cartDataSource)
-
         GenericViewModelFactory.create(
             HomeViewModel(
                 categoryRepository,
                 menuRepository,
-                cartRepository
+                cartRepository,
+                userRepository
             )
         )
     }
@@ -87,7 +96,15 @@ class HomeFragment : Fragment() {
         getCategoryData()
         setCategoryData()
         setThemeMode()
+        setDisplayName()
     }
+
+    private fun setDisplayName() {
+        val currentUser = viewModel.getCurrentUser()
+        binding.layoutHeader.tvName.text =
+            getString(R.string.text_display_name, currentUser?.fullName)
+    }
+
 
     private fun setCategoryData() {
         binding.rvCategory.apply {

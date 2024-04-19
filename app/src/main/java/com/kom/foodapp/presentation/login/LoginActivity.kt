@@ -59,6 +59,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.tvForgetPassword.setOnClickListener {
             requestChangePassword()
+            viewModel.doRequestResetPasswordByEmail()
         }
 
     }
@@ -66,10 +67,11 @@ class LoginActivity : AppCompatActivity() {
     private fun requestChangePassword() {
         //todo : do change password
         val dialog = AlertDialog.Builder(this)
-            .setMessage("Permintaan perubahan kata sandi telah dikirim ke email Anda. Silakan cek di kotak masuk atau folder spam.\"")
+            .setMessage(getString(R.string.text_dialog_when_change_password))
             .setPositiveButton(
-                "Oke"
+                getString(R.string.text_positive_button_dialog)
             ) { dialog, id ->
+
 
             }.create()
         dialog.show()

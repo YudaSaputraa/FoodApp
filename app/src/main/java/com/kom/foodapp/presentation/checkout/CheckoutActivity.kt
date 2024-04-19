@@ -58,7 +58,7 @@ class CheckoutActivity : AppCompatActivity() {
         val authDataSource: AuthDataSource = FirebaseAuthDataSource(service)
         val userRepository: UserRepository = UserRepositoryImpl(authDataSource)
         val menuDataSource: MenuDataSource = MenuApiDataSource(apiService)
-        val menuRepository: MenuRepository = MenuRepositoryImpl(menuDataSource)
+        val menuRepository: MenuRepository = MenuRepositoryImpl(menuDataSource, userRepository)
         GenericViewModelFactory.create(
             CheckoutViewModel(cartRepository, userRepository, menuRepository)
         )

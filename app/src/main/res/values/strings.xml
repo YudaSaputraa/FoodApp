@@ -109,4 +109,11 @@
     <string name="text_sub_login">Masuk untuk mengakses lebih banyak fitur.</string>
     <string name="create_order_success">Pemesanan berhasil!</string>
     <string name="close">Oke</string>
+    <string name="text_display_name">Hai, %1$s</string>
+    <string name="text_dialog_when_change_password">Permintaan perubahan kata sandi telah dikirim ke email Anda. Silakan cek di kotak masuk atau folder spam.\"</string>
+    <string name="text_positive_button_dialog">Oke</string>
+    <string name="text_save">Simpan</string>
+    <string name="text_error_when_same_fullname">Nama tidak boleh sama!</string>
+    <string name="text_success_edit_profile">Perubahan disimpan!</string>
+    <string name="text_confirm_edit_profile_data">Anda yakin ingin mengubah data ?</string>
 </resources>
