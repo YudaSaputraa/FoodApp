@@ -10,6 +10,7 @@ import com.kom.foodapp.data.model.Menu
 import com.kom.foodapp.data.repository.CartRepository
 import com.kom.foodapp.data.repository.CategoryRepository
 import com.kom.foodapp.data.repository.MenuRepository
+import com.kom.foodapp.data.repository.UserRepository
 import com.kom.foodapp.utils.proceedWhen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val categoryRepository: CategoryRepository,
     private val menuRepository: MenuRepository,
-    private val cartRepository: CartRepository
+    private val cartRepository: CartRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
     val menuCountLiveData = MutableLiveData(0).apply {
         postValue(0)
@@ -32,7 +34,7 @@ class HomeViewModel(
         menuCountLiveData.value = 1
 
         viewModelScope.launch {
-            cartRepository.createCart(menu, 1).collect{
+            cartRepository.createCart(menu, 1).collect {
                 it.proceedWhen(
                     doOnSuccess = {
                         Log.d(TAG, "addItemToCart: Success!")
@@ -47,4 +49,6 @@ class HomeViewModel(
             }
         }
     }
+
+    fun getCurrentUser() = userRepository.getCurrentUser()
 }

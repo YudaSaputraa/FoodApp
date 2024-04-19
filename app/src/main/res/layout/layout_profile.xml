@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="@string/text_profile_username"
+        android:text="@string/text_full_name"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_profile" />
@@ -69,34 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:textSize="14sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <TextView
-        android:id="@+id/tv_phone_number_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/text_profile_phone_number"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_input_layout_email" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_layout_phone_number"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_phone_number_title"
-        tools:hint="@string/text_phone_number_value">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_text_phone_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
+            android:inputType="textEmailAddress"
             android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
