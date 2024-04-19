@@ -70,6 +70,8 @@ class HomeFragment : Fragment() {
 
     private var isDarkMode: Boolean = false
     private var menuAdapter: MenuAdapter? = null
+    private var categories: List<Category>? = null
+    private var menuItems: List<Menu>? = null
 
     private val categoryAdapter: CategoryAdapter by lazy {
         CategoryAdapter {
@@ -93,10 +95,19 @@ class HomeFragment : Fragment() {
         bindModeList(isUsingGridMode)
         setClickAction(isUsingGridMode)
         setIconFromPref(isUsingGridMode)
-        getCategoryData()
         setCategoryData()
+        loadCategoriesData()
+        loadMenuData()
         setThemeMode()
         setDisplayName()
+    }
+
+    private fun loadMenuData() {
+        menuItems?.let { bindMenu(it) } ?: getMenuData()
+    }
+
+    private fun loadCategoriesData() {
+        categories?.let { bindCategory(it) } ?: getCategoryData()
     }
 
     private fun setDisplayName() {
@@ -122,7 +133,10 @@ class HomeFragment : Fragment() {
                     binding.layoutOnEmptyDataState.ivOnEmptyData.isVisible = false
                     binding.layoutOnEmptyDataState.tvOnEmptyData.isVisible = false
                     binding.rvMenu.isVisible = true
-                    it.payload?.let { data -> bindMenu(data) }
+                    it.payload?.let { data ->
+                        menuItems = data
+                        bindMenu(data)
+                    }
                 },
                 doOnError = {
                     binding.layoutState.root.isVisible = true
@@ -165,7 +179,6 @@ class HomeFragment : Fragment() {
                 R.id.layout_on_empty_data_state_category,
                 ConstraintSet.BOTTOM
             )
-
         } else {
             constraintSet.connect(
                 R.id.tv_menu_title,
@@ -189,7 +202,10 @@ class HomeFragment : Fragment() {
                     binding.layoutOnEmptyDataStateCategory.ivOnEmptyData.isVisible = false
                     binding.layoutOnEmptyDataStateCategory.tvOnEmptyData.isVisible = false
                     binding.rvCategory.isVisible = true
-                    it.payload?.let { data -> bindCategory(data) }
+                    it.payload?.let { data ->
+                        categories = data
+                        bindCategory(data)
+                    }
                     setMenuTitleConstraint(false)
                 },
                 doOnError = {
@@ -273,14 +289,17 @@ class HomeFragment : Fragment() {
                     1
             )
         }
-        getMenuData(null)
+        loadMenuData()
+        setMenuTitleConstraint(true)
     }
 
     private fun bindCategory(categories: List<Category>) {
+        this.categories = categories
         categoryAdapter.submitData(categories)
     }
 
     private fun bindMenu(menu: List<Menu>) {
+        this.menuItems = menu
         menuAdapter?.submitData(menu)
     }
 
