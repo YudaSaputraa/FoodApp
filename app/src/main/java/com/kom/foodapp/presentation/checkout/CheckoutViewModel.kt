@@ -5,12 +5,17 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.kom.foodapp.data.model.Cart
 import com.kom.foodapp.data.repository.CartRepository
+import com.kom.foodapp.data.repository.MenuRepository
 import com.kom.foodapp.data.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class CheckoutViewModel(private val cartRepository: CartRepository, private val userRepository: UserRepository) : ViewModel() {
+class CheckoutViewModel(
+    private val cartRepository: CartRepository,
+    private val userRepository: UserRepository,
+    private val menuRepository: MenuRepository
+) : ViewModel() {
 
     val checkoutData = cartRepository.getCheckoutData().asLiveData(Dispatchers.IO)
 
@@ -19,6 +24,10 @@ class CheckoutViewModel(private val cartRepository: CartRepository, private val 
             cartRepository.deleteAllCarts().collect()
         }
     }
+
+    fun checkoutCart() = menuRepository.createOrder(
+        checkoutData.value?.payload?.first.orEmpty()
+    ).asLiveData(Dispatchers.IO)
 
     fun isUserLoggedIn() = userRepository.isLoggedIn()
 
