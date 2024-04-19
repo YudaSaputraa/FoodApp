@@ -1,4 +1,4 @@
-package com.kom.foodapp.data.source.network
+package com.kom.foodapp.data.source.local.pref
 
 import android.content.Context
 import com.kom.foodapp.utils.SharedPreferenceUtils

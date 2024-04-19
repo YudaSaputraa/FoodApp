@@ -25,8 +25,8 @@ import com.kom.foodapp.data.repository.CategoryRepositoryImpl
 import com.kom.foodapp.data.repository.MenuRepository
 import com.kom.foodapp.data.repository.MenuRepositoryImpl
 import com.kom.foodapp.data.source.local.database.AppDatabase
-import com.kom.foodapp.data.source.network.UserPreference
-import com.kom.foodapp.data.source.network.UserPreferenceImpl
+import com.kom.foodapp.data.source.local.pref.UserPreference
+import com.kom.foodapp.data.source.local.pref.UserPreferenceImpl
 import com.kom.foodapp.data.source.network.services.FoodAppApiService
 import com.kom.foodapp.databinding.FragmentHomeBinding
 import com.kom.foodapp.presentation.detailmenu.DetailActivity
@@ -39,7 +39,6 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var userPreference: UserPreference
-
 
     private val viewModel: HomeViewModel by viewModels {
         val database = AppDatabase.getInstance(requireContext())
@@ -58,8 +57,6 @@ class HomeFragment : Fragment() {
                 cartRepository
             )
         )
-
-
     }
 
     private var isDarkMode: Boolean = false
