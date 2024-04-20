@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import coil.load
@@ -65,12 +66,13 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun confirmChangeProfileData(){
-        val dialog = AlertDialog.Builder(requireContext()).setMessage(getString(R.string.text_confirm_edit_profile_data))
+    private fun confirmChangeProfileData() {
+        val dialog = AlertDialog.Builder(requireContext())
+            .setMessage(getString(R.string.text_confirm_edit_profile_data))
             .setPositiveButton(
                 "Ya"
             ) { dialog, id ->
-             doChangeFullName()
+                doChangeFullName()
             }
             .setNegativeButton(
                 "Tidak"
@@ -108,12 +110,16 @@ class ProfileFragment : Fragment() {
             viewModel.isUserLoggedOut()
             Toast.makeText(requireContext(), "Logout Success!", Toast.LENGTH_SHORT).show()
             navigateToLogin()
+            requireActivity().supportFragmentManager.popBackStack(
+                null,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
+
         }
     }
 
     private fun navigateToLogin() {
         startActivity(Intent(requireContext(), LoginActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         })
     }
 

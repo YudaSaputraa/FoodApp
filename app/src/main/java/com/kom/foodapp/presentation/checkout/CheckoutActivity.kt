@@ -140,6 +140,7 @@ class CheckoutActivity : AppCompatActivity() {
                     binding.layoutContent.rvItem.isVisible = true
                     binding.layoutButtonOrder.btnOrder.isVisible = true
                     binding.layoutButtonOrder.btnOrder.isEnabled = true
+                    binding.layoutButtonOrder.btnOrder.setTextColor(resources.getColor(R.color.white))
                     viewModel.deleteAllCarts()
                     showOrderSuccessDialog()
 
@@ -199,6 +200,7 @@ class CheckoutActivity : AppCompatActivity() {
                     binding.layoutContent.rvItem.isVisible = true
                     binding.layoutButtonOrder.btnOrder.isVisible = true
                     binding.layoutButtonOrder.btnOrder.isEnabled = true
+                    binding.layoutButtonOrder.btnOrder.setTextColor(resources.getColor(R.color.white))
                     result.payload?.let { (carts, priceItems, totalPrice) ->
                         adapter.submitData(carts)
                         binding.layoutButtonOrder.tvTotalPrice.text = totalPrice.formatToRupiah()

@@ -12,32 +12,33 @@ Github : https://github.com/YudaSaputraa
 interface AuthDataSource {
 
     @Throws(exceptionClasses = [Exception::class])
-    suspend fun doLogin(email : String, password : String) : Boolean
+    suspend fun doLogin(email: String, password: String): Boolean
 
 
     @Throws(exceptionClasses = [Exception::class])
-    suspend fun doRegister(fullName : String, email : String, password : String) : Boolean
+    suspend fun doRegister(fullName: String, email: String, password: String): Boolean
 
-     @Throws(exceptionClasses = [Exception::class])
-    suspend fun updateProfile(fullName : String? = null) : Boolean
-
-
-     @Throws(exceptionClasses = [Exception::class])
-    suspend fun updatePassword(newPassword : String) : Boolean
-
-     @Throws(exceptionClasses = [Exception::class])
-    suspend fun updateEmail(newEmail : String) : Boolean
+    @Throws(exceptionClasses = [Exception::class])
+    suspend fun updateProfile(fullName: String? = null): Boolean
 
 
-    fun reqChangePasswordByEmail() : Boolean
-    fun doLogout():Boolean
+    @Throws(exceptionClasses = [Exception::class])
+    suspend fun updatePassword(newPassword: String): Boolean
+
+    @Throws(exceptionClasses = [Exception::class])
+    suspend fun updateEmail(newEmail: String): Boolean
+
+    @Throws(exceptionClasses = [Exception::class])
+    suspend fun reqChangePasswordByEmailWithoutLogin(email: String): Boolean
+    fun reqChangePasswordByEmail(): Boolean
+    fun doLogout(): Boolean
     fun isLoggedIn(): Boolean
-    fun getCurrentUser():User?
+    fun getCurrentUser(): User?
 
 
 }
 
-class FirebaseAuthDataSource(private val service: FirebaseService) : AuthDataSource{
+class FirebaseAuthDataSource(private val service: FirebaseService) : AuthDataSource {
     override suspend fun doLogin(email: String, password: String): Boolean {
         return service.doLogin(email, password)
     }
@@ -51,19 +52,23 @@ class FirebaseAuthDataSource(private val service: FirebaseService) : AuthDataSou
     }
 
     override suspend fun updateProfile(fullName: String?): Boolean {
-    return service.updateProfile(fullName)
+        return service.updateProfile(fullName)
     }
 
     override suspend fun updatePassword(newPassword: String): Boolean {
-       return service.updatePassword(newPassword)
+        return service.updatePassword(newPassword)
     }
 
     override suspend fun updateEmail(newEmail: String): Boolean {
-      return service.updateEmail(newEmail)
+        return service.updateEmail(newEmail)
+    }
+
+    override suspend fun reqChangePasswordByEmailWithoutLogin(email: String): Boolean {
+        return service.reqChangePasswordByEmailWithoutLogin(email)
     }
 
     override fun reqChangePasswordByEmail(): Boolean {
-       return service.reqChangePasswordByEmail()
+        return service.reqChangePasswordByEmail()
     }
 
     override fun doLogout(): Boolean {
@@ -71,11 +76,11 @@ class FirebaseAuthDataSource(private val service: FirebaseService) : AuthDataSou
     }
 
     override fun isLoggedIn(): Boolean {
-      return service.isLoggedIn()
+        return service.isLoggedIn()
     }
 
     override fun getCurrentUser(): User? {
-      return service.getCurrentUser().toUser()
+        return service.getCurrentUser().toUser()
     }
 
 }
