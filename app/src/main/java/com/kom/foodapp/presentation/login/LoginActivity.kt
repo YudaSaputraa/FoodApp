@@ -1,15 +1,17 @@
 package com.kom.foodapp.presentation.login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
+import android.util.Log
 import android.util.Patterns
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputLayout
 import com.kom.foodapp.R
@@ -22,10 +24,10 @@ import com.kom.foodapp.data.source.firebase.FirebaseServiceImpl
 import com.kom.foodapp.databinding.ActivityLoginBinding
 import com.kom.foodapp.presentation.main.MainActivity
 import com.kom.foodapp.presentation.register.RegisterActivity
-import com.kom.foodapp.presentation.register.RegisterViewModel
 import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.highLightWord
 import com.kom.foodapp.utils.proceedWhen
+import kotlinx.coroutines.delay
 
 //TODO:PERLU IMPROVE
 class LoginActivity : AppCompatActivity() {
@@ -58,20 +60,69 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.tvForgetPassword.setOnClickListener {
-            requestChangePassword()
-            viewModel.doRequestResetPasswordByEmail()
+            createEmailInputDialog(this)
         }
 
     }
 
-    private fun requestChangePassword() {
-        //todo : do change password
+
+    private fun createEmailInputDialog(context: Context) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Reset Password")
+        val layoutContainer = LinearLayout(context)
+        layoutContainer.orientation = LinearLayout.VERTICAL
+        val textInputLayout = TextInputLayout(context)
+        textInputLayout.hint = "Email"
+        val input = EditText(context)
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        input.layoutParams = layoutParams
+        input.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+
+        textInputLayout.addView(input)
+        layoutContainer.addView(textInputLayout)
+        textInputLayout.setPadding(32, 32, 32, 32)
+        builder.setView(layoutContainer)
+
+        builder.setPositiveButton(getString(R.string.text_submit)) { dialog, _ ->
+            val email = input.text.toString()
+            viewModel.doRequestChangePasswordByEmailWithoutLogin(email).observe(this) { result ->
+                result.proceedWhen(
+                    doOnSuccess = {
+                        requestChangePasswordDialogSuccess()
+                    },
+                    doOnError = {
+                        Toast.makeText(
+                            this,
+                            "Error :  ${it.exception?.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.d(
+                            "reqChangePasswordByEmail",
+                            "createEmailInputDialog: ${it.exception?.message}"
+                        )
+                    }
+                )
+            }
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton(getString(R.string.text_cencel)) { dialog, _ ->
+            dialog.cancel()
+        }
+
+        builder.show()
+    }
+
+
+    private fun requestChangePasswordDialogSuccess() {
         val dialog = AlertDialog.Builder(this)
             .setMessage(getString(R.string.text_dialog_when_change_password))
             .setPositiveButton(
                 getString(R.string.text_positive_button_dialog)
             ) { dialog, id ->
-
 
             }.create()
         dialog.show()

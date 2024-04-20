@@ -32,6 +32,8 @@ interface UserRepository {
 
     fun updateEmail(newEmail: String): Flow<ResultWrapper<Boolean>>
 
+    fun reqChangePasswordByEmailWithoutLogin(email: String): Flow<ResultWrapper<Boolean>>
+
 
     fun reqChangePasswordByEmail(): Boolean
     fun doLogout(): Boolean
@@ -39,7 +41,7 @@ interface UserRepository {
     fun getCurrentUser(): User?
 }
 
-class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepository{
+class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepository {
     override fun doLogin(email: String, password: String): Flow<ResultWrapper<Boolean>> {
         return proceedFlow { dataSource.doLogin(email, password) }
     }
@@ -53,15 +55,19 @@ class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepositor
     }
 
     override fun updateProfile(fullName: String?): Flow<ResultWrapper<Boolean>> {
-      return proceedFlow { dataSource.updateProfile(fullName = fullName) }
+        return proceedFlow { dataSource.updateProfile(fullName = fullName) }
     }
 
     override fun updatePassword(newPassword: String): Flow<ResultWrapper<Boolean>> {
-       return proceedFlow { dataSource.updatePassword(newPassword) }
+        return proceedFlow { dataSource.updatePassword(newPassword) }
     }
 
     override fun updateEmail(newEmail: String): Flow<ResultWrapper<Boolean>> {
         return proceedFlow { dataSource.updateEmail(newEmail) }
+    }
+
+    override fun reqChangePasswordByEmailWithoutLogin(email: String): Flow<ResultWrapper<Boolean>> {
+        return proceedFlow { dataSource.reqChangePasswordByEmailWithoutLogin(email) }
     }
 
     override fun reqChangePasswordByEmail(): Boolean {
@@ -77,7 +83,7 @@ class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepositor
     }
 
     override fun getCurrentUser(): User? {
-       return dataSource.getCurrentUser()
+        return dataSource.getCurrentUser()
     }
 
 }

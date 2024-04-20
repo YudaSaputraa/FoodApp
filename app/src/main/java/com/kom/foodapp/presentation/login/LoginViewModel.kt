@@ -15,5 +15,7 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
             .doLogin(email, password)
             .asLiveData(Dispatchers.IO)
 
-    fun doRequestResetPasswordByEmail() = repository.reqChangePasswordByEmail()
+    fun doRequestChangePasswordByEmailWithoutLogin(email: String) = repository
+        .reqChangePasswordByEmailWithoutLogin(email)
+        .asLiveData(Dispatchers.IO)
 }

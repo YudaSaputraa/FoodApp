@@ -9,11 +9,17 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.kom.foodapp.R
+import com.kom.foodapp.data.datasource.authentication.AuthDataSource
+import com.kom.foodapp.data.datasource.authentication.FirebaseAuthDataSource
 import com.kom.foodapp.data.datasource.cart.CartDataSource
 import com.kom.foodapp.data.datasource.cart.CartDatabaseDataSource
 import com.kom.foodapp.data.model.Cart
 import com.kom.foodapp.data.repository.CartRepository
 import com.kom.foodapp.data.repository.CartRepositoryImpl
+import com.kom.foodapp.data.repository.UserRepository
+import com.kom.foodapp.data.repository.UserRepositoryImpl
+import com.kom.foodapp.data.source.firebase.FirebaseService
+import com.kom.foodapp.data.source.firebase.FirebaseServiceImpl
 import com.kom.foodapp.data.source.local.database.AppDatabase
 import com.kom.foodapp.databinding.FragmentCartBinding
 import com.kom.foodapp.databinding.FragmentProfileBinding
@@ -21,6 +27,7 @@ import com.kom.foodapp.presentation.checkout.CheckoutActivity
 import com.kom.foodapp.presentation.common.adapter.CartListAdapter
 import com.kom.foodapp.presentation.common.adapter.CartListener
 import com.kom.foodapp.presentation.detailmenu.DetailMenuViewModel
+import com.kom.foodapp.presentation.login.LoginActivity
 import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.formatToRupiah
 import com.kom.foodapp.utils.hideKeyboard
@@ -32,8 +39,11 @@ class CartFragment : Fragment() {
         val database = AppDatabase.getInstance(requireContext())
         val dataSource: CartDataSource = CartDatabaseDataSource(database.cartDao())
         val cartRepository: CartRepository = CartRepositoryImpl(dataSource)
+        val service: FirebaseService = FirebaseServiceImpl()
+        val authDataSource: AuthDataSource = FirebaseAuthDataSource(service)
+        val userRepository: UserRepository = UserRepositoryImpl(authDataSource)
         GenericViewModelFactory.create(
-            CartViewModel(cartRepository)
+            CartViewModel(cartRepository, userRepository)
         )
     }
 
@@ -77,8 +87,18 @@ class CartFragment : Fragment() {
 
     private fun setClickAction() {
         binding.layoutBtnTotal.btnOrder.setOnClickListener {
-            startActivity(Intent(requireContext(), CheckoutActivity::class.java))
+            if (!viewModel.userIsLoggedIn()) {
+                navigateToLogin()
+            } else {
+                startActivity(Intent(requireContext(), CheckoutActivity::class.java))
+            }
         }
+    }
+
+    private fun navigateToLogin() {
+        startActivity(Intent(requireContext(), LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        })
     }
 
     private fun observeData() {
@@ -128,6 +148,7 @@ class CartFragment : Fragment() {
                     binding.layoutOnEmptyDataState.tvOnEmptyData.isVisible = false
                     binding.rvCart.isVisible = true
                     binding.layoutBtnTotal.btnOrder.isEnabled = true
+                    binding.layoutBtnTotal.btnOrder.setTextColor(resources.getColor(R.color.white))
                     result.payload?.let { (carts, totalPrice) ->
                         adapter.submitData(carts)
                         binding.layoutBtnTotal.tvTotalPrice.text = totalPrice.formatToRupiah()
