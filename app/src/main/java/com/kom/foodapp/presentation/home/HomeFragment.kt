@@ -20,6 +20,8 @@ import com.kom.foodapp.data.datasource.category.CategoryApiDataSource
 import com.kom.foodapp.data.datasource.category.CategoryDataSource
 import com.kom.foodapp.data.datasource.menu.MenuApiDataSource
 import com.kom.foodapp.data.datasource.menu.MenuDataSource
+import com.kom.foodapp.data.datasource.user.UserPrefDataSource
+import com.kom.foodapp.data.datasource.user.UserPrefDataSourceImpl
 import com.kom.foodapp.data.model.Category
 import com.kom.foodapp.data.model.Menu
 import com.kom.foodapp.data.repository.CartRepositoryImpl
@@ -27,6 +29,8 @@ import com.kom.foodapp.data.repository.CategoryRepository
 import com.kom.foodapp.data.repository.CategoryRepositoryImpl
 import com.kom.foodapp.data.repository.MenuRepository
 import com.kom.foodapp.data.repository.MenuRepositoryImpl
+import com.kom.foodapp.data.repository.UserPrefRepository
+import com.kom.foodapp.data.repository.UserPrefRepositoryImpl
 import com.kom.foodapp.data.repository.UserRepository
 import com.kom.foodapp.data.repository.UserRepositoryImpl
 import com.kom.foodapp.data.source.firebase.FirebaseService
@@ -45,7 +49,6 @@ import com.kom.foodapp.utils.proceedWhen
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var userPreference: UserPreference
 
     private val viewModel: HomeViewModel by viewModels {
         val database = AppDatabase.getInstance(requireContext())
@@ -59,12 +62,16 @@ class HomeFragment : Fragment() {
         val categoryDataSource: CategoryDataSource = CategoryApiDataSource(apiService)
         val categoryRepository: CategoryRepository = CategoryRepositoryImpl(categoryDataSource)
         val cartRepository = CartRepositoryImpl(cartDataSource)
+        val userPrefPreference: UserPreference = UserPreferenceImpl(requireContext())
+        val userPrefDataSource: UserPrefDataSource = UserPrefDataSourceImpl(userPrefPreference)
+        val userPrefRepository: UserPrefRepository = UserPrefRepositoryImpl(userPrefDataSource)
         GenericViewModelFactory.create(
             HomeViewModel(
                 categoryRepository,
                 menuRepository,
                 cartRepository,
-                userRepository
+                userRepository,
+                userPrefRepository
             )
         )
     }
@@ -90,8 +97,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userPreference = UserPreferenceImpl(requireContext())
-        val isUsingGridMode = userPreference.isUsingGridMode()
+        val isUsingGridMode = viewModel.isUsingGridMode()
         bindModeList(isUsingGridMode)
         setClickAction(isUsingGridMode)
         setIconFromPref(isUsingGridMode)
@@ -130,11 +136,11 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setListMenuOnCategoryClicked(){
+    private fun setListMenuOnCategoryClicked() {
         categoryAdapter.setOnItemClickListener { category ->
             if (category.name == lastSelectedCategory) {
                 lastSelectedCategory = null
-               getMenuData()
+                getMenuData()
             } else {
                 getMenuData(category.name)
                 lastSelectedCategory = category.name
@@ -335,7 +341,7 @@ class HomeFragment : Fragment() {
                 binding.ivMenuList.setImageResource(R.drawable.ic_menu_grid)
             bindModeList(isGridMode)
             loadMenuData()
-            userPreference.setUsingGridMode(isGridMode)
+            viewModel.setUsingGridMode(isGridMode)
         }
     }
 

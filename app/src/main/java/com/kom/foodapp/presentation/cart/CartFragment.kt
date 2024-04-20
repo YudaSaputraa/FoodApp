@@ -2,11 +2,11 @@ package com.kom.foodapp.presentation.cart
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.kom.foodapp.R
 import com.kom.foodapp.data.datasource.authentication.AuthDataSource
@@ -22,11 +22,9 @@ import com.kom.foodapp.data.source.firebase.FirebaseService
 import com.kom.foodapp.data.source.firebase.FirebaseServiceImpl
 import com.kom.foodapp.data.source.local.database.AppDatabase
 import com.kom.foodapp.databinding.FragmentCartBinding
-import com.kom.foodapp.databinding.FragmentProfileBinding
 import com.kom.foodapp.presentation.checkout.CheckoutActivity
 import com.kom.foodapp.presentation.common.adapter.CartListAdapter
 import com.kom.foodapp.presentation.common.adapter.CartListener
-import com.kom.foodapp.presentation.detailmenu.DetailMenuViewModel
 import com.kom.foodapp.presentation.login.LoginActivity
 import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.formatToRupiah

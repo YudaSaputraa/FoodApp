@@ -4,11 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputLayout
 import com.kom.foodapp.R

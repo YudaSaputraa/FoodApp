@@ -2,13 +2,9 @@ package com.kom.foodapp.presentation.splashscreen
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.kom.foodapp.R
 import com.kom.foodapp.data.datasource.authentication.AuthDataSource
 import com.kom.foodapp.data.datasource.authentication.FirebaseAuthDataSource
 import com.kom.foodapp.data.repository.UserRepository

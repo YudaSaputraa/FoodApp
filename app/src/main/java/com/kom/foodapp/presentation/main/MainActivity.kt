@@ -2,11 +2,8 @@ package com.kom.foodapp.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.kom.foodapp.R
@@ -18,7 +15,6 @@ import com.kom.foodapp.data.source.firebase.FirebaseService
 import com.kom.foodapp.data.source.firebase.FirebaseServiceImpl
 import com.kom.foodapp.databinding.ActivityMainBinding
 import com.kom.foodapp.presentation.login.LoginActivity
-import com.kom.foodapp.presentation.profile.ProfileViewModel
 import com.kom.foodapp.utils.GenericViewModelFactory
 
 class MainActivity : AppCompatActivity() {
