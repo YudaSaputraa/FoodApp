@@ -10,6 +10,7 @@ import com.kom.foodapp.data.model.Menu
 import com.kom.foodapp.data.repository.CartRepository
 import com.kom.foodapp.data.repository.CategoryRepository
 import com.kom.foodapp.data.repository.MenuRepository
+import com.kom.foodapp.data.repository.UserPrefRepository
 import com.kom.foodapp.data.repository.UserRepository
 import com.kom.foodapp.utils.proceedWhen
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,7 @@ class HomeViewModel(
     private val menuRepository: MenuRepository,
     private val cartRepository: CartRepository,
     private val userRepository: UserRepository,
+    private val userPrefRepository: UserPrefRepository
 ) : ViewModel() {
     val menuCountLiveData = MutableLiveData(0).apply {
         postValue(0)
@@ -52,4 +54,8 @@ class HomeViewModel(
 
     fun getCurrentUser() = userRepository.getCurrentUser()
     fun userIsLoggedIn() = userRepository.isLoggedIn()
+
+    fun isUsingGridMode() = userPrefRepository.isUsingGridMode()
+    fun setUsingGridMode(isUsingGridMode: Boolean) =
+        userPrefRepository.setUsingGridMode(isUsingGridMode)
 }

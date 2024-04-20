@@ -3,7 +3,6 @@ package com.kom.foodapp.presentation.checkout
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.kom.foodapp.data.model.Cart
 import com.kom.foodapp.data.repository.CartRepository
 import com.kom.foodapp.data.repository.MenuRepository
 import com.kom.foodapp.data.repository.UserRepository

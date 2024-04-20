@@ -3,15 +3,10 @@ package com.kom.foodapp.presentation.checkout
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager
-import android.widget.Button
-import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
 import com.kom.foodapp.R
 import com.kom.foodapp.data.datasource.authentication.AuthDataSource
 import com.kom.foodapp.data.datasource.authentication.FirebaseAuthDataSource
@@ -34,11 +29,9 @@ import com.kom.foodapp.databinding.LayoutDialogOrderBinding
 import com.kom.foodapp.presentation.checkout.adapter.PriceListAdapter
 import com.kom.foodapp.presentation.common.adapter.CartListAdapter
 import com.kom.foodapp.presentation.login.LoginActivity
-import com.kom.foodapp.presentation.main.MainActivity
 import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.formatToRupiah
 import com.kom.foodapp.utils.proceedWhen
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date

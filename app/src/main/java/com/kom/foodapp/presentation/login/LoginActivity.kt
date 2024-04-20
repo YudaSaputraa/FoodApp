@@ -27,9 +27,7 @@ import com.kom.foodapp.presentation.register.RegisterActivity
 import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.highLightWord
 import com.kom.foodapp.utils.proceedWhen
-import kotlinx.coroutines.delay
 
-//TODO:PERLU IMPROVE
 class LoginActivity : AppCompatActivity() {
     private val binding: ActivityLoginBinding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
