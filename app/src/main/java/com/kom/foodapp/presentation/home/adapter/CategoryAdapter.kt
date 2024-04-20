@@ -16,6 +16,11 @@ class CategoryAdapter(private val itemClick: (Category) -> Unit) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     private var selectedCategory = RecyclerView.NO_POSITION
+    private var onItemClickListener: ((Category) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (Category) -> Unit) {
+        onItemClickListener = listener
+    }
 
     fun submitData(items: List<Category>) {
         asyncDataDiffer.submitList(items)
@@ -40,10 +45,18 @@ class CategoryAdapter(private val itemClick: (Category) -> Unit) :
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    itemClick(asyncDataDiffer.currentList[position])
-                    notifyItemChanged(selectedCategory)
-                    selectedCategory = position
-                    notifyItemChanged(selectedCategory)
+                    val currentCategory = asyncDataDiffer.currentList[position]
+                    if (selectedCategory != position) {
+                        val previouslySelectedCategory = selectedCategory
+                        selectedCategory = position
+                        notifyItemChanged(previouslySelectedCategory)
+                        notifyItemChanged(selectedCategory)
+                        onItemClickListener?.invoke(currentCategory)
+                    } else {
+                        selectedCategory = RecyclerView.NO_POSITION
+                        notifyItemChanged(position)
+                        onItemClickListener?.invoke(currentCategory)
+                    }
                 }
             }
         }
@@ -61,6 +74,7 @@ class CategoryAdapter(private val itemClick: (Category) -> Unit) :
             }
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val binding =
