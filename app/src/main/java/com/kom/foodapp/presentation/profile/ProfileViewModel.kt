@@ -45,8 +45,4 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
             .updateProfile(newFullName)
             .asLiveData(Dispatchers.IO)
 
-    fun updateEmail(newEmail: String) =
-        userRepository
-            .updateEmail(newEmail)
-            .asLiveData(Dispatchers.IO)
 }

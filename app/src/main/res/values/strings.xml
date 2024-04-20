@@ -119,4 +119,6 @@
     <string name="text_user_not_login">Anda belum login!</string>
     <string name="text_cencel">Batal</string>
     <string name="text_submit">Submit</string>
+    <string name="text_all_data">All</string>
+    <string name="text_confirm_change_password_dialog">Yakin mau ganti password?</string>
 </resources>

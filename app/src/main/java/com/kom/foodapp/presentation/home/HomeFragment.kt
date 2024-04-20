@@ -73,10 +73,10 @@ class HomeFragment : Fragment() {
     private var menuAdapter: MenuAdapter? = null
     private var categories: List<Category>? = null
     private var menuItems: List<Menu>? = null
+    private var lastSelectedCategory: String? = null
 
     private val categoryAdapter: CategoryAdapter by lazy {
         CategoryAdapter {
-            getMenuData(it.name)
         }
     }
 
@@ -100,6 +100,7 @@ class HomeFragment : Fragment() {
         loadMenuData()
         setThemeMode()
         setDisplayName()
+        setListMenuOnCategoryClicked()
     }
 
     private fun loadMenuData() {
@@ -126,6 +127,18 @@ class HomeFragment : Fragment() {
     private fun setCategoryData() {
         binding.rvCategory.apply {
             adapter = categoryAdapter
+        }
+    }
+
+    private fun setListMenuOnCategoryClicked(){
+        categoryAdapter.setOnItemClickListener { category ->
+            if (category.name == lastSelectedCategory) {
+                lastSelectedCategory = null
+               getMenuData()
+            } else {
+                getMenuData(category.name)
+                lastSelectedCategory = category.name
+            }
         }
     }
 
@@ -196,7 +209,6 @@ class HomeFragment : Fragment() {
         constraintSet.applyTo(binding.clContent)
     }
 
-
     private fun getCategoryData() {
         viewModel.getCategories().observe(viewLifecycleOwner) {
             it.proceedWhen(
@@ -204,8 +216,8 @@ class HomeFragment : Fragment() {
                     binding.layoutStateCategory.root.isVisible = false
                     binding.layoutOnEmptyDataState.root.isVisible = false
                     binding.layoutStateCategory.pbLoading.isVisible = false
-                    binding.layoutOnEmptyDataStateCategory.ivOnEmptyData.isVisible = false
-                    binding.layoutOnEmptyDataStateCategory.tvOnEmptyData.isVisible = false
+                    binding.layoutOnEmptyDataState.ivOnEmptyData.isVisible = false
+                    binding.layoutOnEmptyDataState.tvOnEmptyData.isVisible = false
                     binding.rvCategory.isVisible = true
                     it.payload?.let { data ->
                         categories = data
@@ -245,7 +257,6 @@ class HomeFragment : Fragment() {
             )
         }
     }
-
 
     private fun setThemeMode() {
         binding.layoutHeader.ivThemeMode.setOnClickListener {
@@ -295,6 +306,7 @@ class HomeFragment : Fragment() {
             )
         }
         setMenuTitleConstraint(false)
+
     }
 
     private fun bindCategory(categories: List<Category>) {
@@ -334,5 +346,4 @@ class HomeFragment : Fragment() {
             binding.ivMenuList.setImageResource(R.drawable.ic_menu_grid)
         }
     }
-
 }

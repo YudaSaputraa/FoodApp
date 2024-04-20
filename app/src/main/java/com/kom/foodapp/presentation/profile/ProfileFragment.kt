@@ -2,8 +2,6 @@ package com.kom.foodapp.presentation.profile
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,14 +53,11 @@ class ProfileFragment : Fragment() {
         profileViewModel.fetchProfileData()
         observeProfileData()
         reqChangePasswordByEmail()
-
-
     }
 
     private fun reqChangePasswordByEmail() {
         binding.btnChangePassword.setOnClickListener {
-            viewModel.requestChangePasswordByEmail()
-            requestChangePasswordDialog()
+            confirmChangePassword()
         }
     }
 
@@ -73,6 +68,22 @@ class ProfileFragment : Fragment() {
                 "Ya"
             ) { dialog, id ->
                 doChangeFullName()
+            }
+            .setNegativeButton(
+                "Tidak"
+            ) { dialog, id ->
+            }.create()
+        dialog.show()
+    }
+
+    private fun confirmChangePassword() {
+        val dialog = AlertDialog.Builder(requireContext())
+            .setMessage(getString(R.string.text_confirm_change_password_dialog))
+            .setPositiveButton(
+                "Ya"
+            ) { dialog, id ->
+                viewModel.requestChangePasswordByEmail()
+                requestChangePasswordDialog()
             }
             .setNegativeButton(
                 "Tidak"
@@ -100,8 +111,8 @@ class ProfileFragment : Fragment() {
                 crossfade(true)
                 error(R.drawable.img_error)
             }
-            binding.layoutProfile.editTextUsername.setText(currentUser?.fullName)
-            binding.layoutProfile.editTextEmail.setText(currentUser?.email)
+            binding.layoutProfile.etFullName.setText(currentUser?.fullName)
+            binding.layoutProfile.etEmail.setText(currentUser?.email)
         })
     }
 
@@ -131,89 +142,41 @@ class ProfileFragment : Fragment() {
             }
         }
         binding.btnSave.setOnClickListener {
-            confirmChangeProfileData()
-//            doChangeEmail()
+            if (isFormFullNameValid())
+                confirmChangeProfileData()
         }
     }
-
-    private fun doChangeEmail() {
-        if (isFormEmailValid()) {
-            val newEmail = binding.layoutProfile.editTextEmail.text.toString().trim()
-            changeEmailProcess(newEmail)
-        }
-    }
-
 
     private fun doChangeFullName() {
         if (isFormFullNameValid()) {
-            val newFullName = binding.layoutProfile.editTextUsername.text.toString().trim()
+            val newFullName = binding.layoutProfile.etFullName.text.toString().trim()
             changeProfileProcess(newFullName)
         }
     }
 
-    private fun isFormEmailValid(): Boolean {
-        val newEmail = binding.layoutProfile.editTextEmail.text.toString().trim()
-        return changeEmailFormValidation(newEmail)
-
-    }
-
-    private fun changeEmailFormValidation(newEmail: String): Boolean {
-        return if (newEmail.isEmpty()) {
-            binding.layoutProfile.textInputLayoutEmail.isErrorEnabled = true
-            binding.layoutProfile.editTextEmail.error = getString(R.string.text_email_cannot_empty)
-            false
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(newEmail).matches()) {
-            binding.layoutProfile.textInputLayoutEmail.isErrorEnabled = true
-            binding.layoutProfile.editTextEmail.error =
-                getString(R.string.text_invalid_email_format)
-            false
-        } else {
-            binding.layoutProfile.textInputLayoutEmail.isErrorEnabled = false
-            true
-        }
-    }
-
     private fun isFormFullNameValid(): Boolean {
-        val newFullName = binding.layoutProfile.editTextUsername.text.toString().trim()
+        val newFullName = binding.layoutProfile.etFullName.text.toString().trim()
         return changeFullNameFormValidation(newFullName)
     }
 
     private fun changeFullNameFormValidation(newFullName: String): Boolean {
         val currentFullName = viewModel.getCurrentUser()
         return if (newFullName == currentFullName?.fullName) {
-            binding.layoutProfile.textInputLayoutEmail.isErrorEnabled = true
-            binding.layoutProfile.editTextUsername.error =
+            binding.layoutProfile.tilFullName.isErrorEnabled = true
+            binding.layoutProfile.tilFullName.error =
                 getString(R.string.text_error_when_same_fullname)
             false
+        } else if (newFullName.isEmpty()) {
+            binding.layoutProfile.tilFullName.isErrorEnabled = true
+            binding.layoutProfile.tilFullName.error =
+                getString(R.string.text_fullname_cannot_empty)
+            false
         } else {
-            binding.layoutProfile.textInputLayoutEmail.isErrorEnabled = false
+            binding.layoutProfile.tilFullName.isErrorEnabled = false
             true
         }
-
     }
 
-    private fun changeEmailProcess(newEmail: String) {
-        viewModel.updateEmail(newEmail).observe(viewLifecycleOwner) { result ->
-            result.proceedWhen(
-                doOnSuccess = {
-                    binding.btnSave.isVisible = false
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.text_success_edit_profile), Toast.LENGTH_SHORT
-                    ).show()
-                    profileViewModel.changeEditMode()
-                },
-                doOnError = {
-                    Toast.makeText(
-                        requireContext(),
-                        "error ${it.exception?.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.d("EmailUpdate", "changeEmailProcess: ${it.exception?.message}")
-                }
-            )
-        }
-    }
 
     private fun changeProfileProcess(newFullName: String) {
         viewModel.updateProfile(newFullName).observe(viewLifecycleOwner) { result ->
@@ -234,14 +197,12 @@ class ProfileFragment : Fragment() {
                     ).show()
                 }
             )
-
         }
     }
 
     private fun editProfile() {
         profileViewModel.isEditProfile.observe(viewLifecycleOwner) {
-            binding.layoutProfile.editTextUsername.isEnabled = it
-            binding.layoutProfile.editTextEmail.isEnabled = it
+            binding.layoutProfile.etFullName.isEnabled = it
 
         }
     }
