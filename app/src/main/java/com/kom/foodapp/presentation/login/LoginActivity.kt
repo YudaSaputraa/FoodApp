@@ -83,35 +83,36 @@ class LoginActivity : AppCompatActivity() {
         layoutContainer.addView(textInputLayout)
         textInputLayout.setPadding(32, 32, 32, 32)
         builder.setView(layoutContainer)
-
         builder.setPositiveButton(getString(R.string.text_submit)) { dialog, _ ->
             val email = input.text.toString()
-            viewModel.doRequestChangePasswordByEmailWithoutLogin(email).observe(this) { result ->
-                result.proceedWhen(
-                    doOnSuccess = {
-                        requestChangePasswordDialogSuccess()
-                    },
-                    doOnError = {
-                        Toast.makeText(
-                            this,
-                            "Error :  ${it.exception?.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Log.d(
-                            "reqChangePasswordByEmail",
-                            "createEmailInputDialog: ${it.exception?.message}"
-                        )
-                    }
-                )
-            }
+            forgetPasswordRequestProcess(email)
             dialog.dismiss()
         }
-
         builder.setNegativeButton(getString(R.string.text_cencel)) { dialog, _ ->
             dialog.cancel()
         }
-
         builder.show()
+    }
+
+    private fun forgetPasswordRequestProcess(email: String) {
+        viewModel.doRequestChangePasswordByEmailWithoutLogin(email).observe(this) { result ->
+            result.proceedWhen(
+                doOnSuccess = {
+                    requestChangePasswordDialogSuccess()
+                },
+                doOnError = {
+                    Toast.makeText(
+                        this,
+                        "Error :  ${it.exception?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.d(
+                        "reqChangePasswordByEmail",
+                        "createEmailInputDialog: ${it.exception?.message}"
+                    )
+                }
+            )
+        }
     }
 
 
@@ -151,11 +152,17 @@ class LoginActivity : AppCompatActivity() {
                 doOnError = {
                     binding.pbLoading.isVisible = false
                     binding.btnLogin.isVisible = true
-                    Toast.makeText(
-                        this,
-                        getString(R.string.text_login_failed, it.exception?.message.orEmpty()),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    binding.btnLogin.isEnabled = true
+                    binding.btnLogin.text = getString(R.string.text_login)
+
+                    val errorMessage = it.exception?.message ?: getString(R.string.error_unknown)
+                    val errorText = if (errorMessage.contains("password")) {
+                        getString(R.string.error_wrong_password)
+                    } else {
+                        getString(R.string.error_wrong_email)
+                    }
+
+                    Toast.makeText(this, errorText, Toast.LENGTH_SHORT).show()
                 },
                 doOnLoading = {
                     binding.pbLoading.isVisible = true

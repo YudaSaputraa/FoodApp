@@ -95,14 +95,14 @@ class CheckoutActivity : AppCompatActivity() {
         val dialogBinding = LayoutDialogOrderBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
 
-        val currentDateAndTime =
-            SimpleDateFormat("dd MMMM yyyy HH:mm:ss").format(Date())
+        val currentDateAndTime = SimpleDateFormat("dd MMMM yyyy HH:mm:ss").format(Date())
         dialogBinding.tvDateTime.text = currentDateAndTime
         viewModel.checkoutData.value?.payload?.let { (carts, _, totalPrice) ->
             dialogBinding.tvTotalPriceSuccess.text = totalPrice.formatToRupiah()
         }
         dialogBinding.rvSummaryOrder.adapter = priceItemAdapter
         dialog.show()
+
         dialogBinding.btnBackOnSuccess.setOnClickListener {
             viewModel.deleteAllCarts()
             dialog.dismiss()
@@ -179,7 +179,6 @@ class CheckoutActivity : AppCompatActivity() {
         }
     }
 
-
     private fun observeData() {
         viewModel.checkoutData.observe(this) { result ->
             result.proceedWhen(
@@ -237,8 +236,8 @@ class CheckoutActivity : AppCompatActivity() {
                     data.payload?.let { (_, _, totalPrice) ->
                         binding.layoutButtonOrder.tvTotalPrice.text = totalPrice.formatToRupiah()
                     }
-                    binding.layoutContent.root.isVisible = false
-                    binding.layoutContent.rvItem.isVisible = false
+                    binding.layoutContent.root.isVisible = true
+                    binding.layoutContent.rvItem.isVisible = true
                     binding.layoutButtonOrder.btnOrder.isEnabled = false
                 }
             )

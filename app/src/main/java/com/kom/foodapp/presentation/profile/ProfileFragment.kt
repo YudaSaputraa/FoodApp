@@ -52,13 +52,6 @@ class ProfileFragment : Fragment() {
         loggedOut()
         profileViewModel.fetchProfileData()
         observeProfileData()
-        reqChangePasswordByEmail()
-    }
-
-    private fun reqChangePasswordByEmail() {
-        binding.btnChangePassword.setOnClickListener {
-            confirmChangePassword()
-        }
     }
 
     private fun confirmChangeProfileData() {
@@ -135,15 +128,22 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setClickListener() {
-        binding.layoutHeader.ivEditProfile.setOnClickListener {
-            profileViewModel.changeEditMode()
-            profileViewModel.isEditProfile.observe(viewLifecycleOwner) { isEditMode ->
-                binding.btnSave.isVisible = isEditMode
+        with(binding) {
+            layoutHeader.ivEditProfile.setOnClickListener {
+                profileViewModel.changeEditMode()
+                profileViewModel.isEditProfile.observe(viewLifecycleOwner) { isEditMode ->
+                    binding.btnSave.isVisible = isEditMode
+                }
             }
-        }
-        binding.btnSave.setOnClickListener {
-            if (isFormFullNameValid())
-                confirmChangeProfileData()
+
+            btnSave.setOnClickListener {
+                if (isFormFullNameValid())
+                    confirmChangeProfileData()
+            }
+
+            btnChangePassword.setOnClickListener {
+                confirmChangePassword()
+            }
         }
     }
 
