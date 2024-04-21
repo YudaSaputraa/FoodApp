@@ -80,10 +80,10 @@ class CartFragment : Fragment() {
 //        tryNavigateCheckout()
         setList()
         observeData()
-        setClickAction()
+        setClickListener()
     }
 
-    private fun setClickAction() {
+    private fun setClickListener() {
         binding.layoutBtnTotal.btnOrder.setOnClickListener {
             if (!viewModel.userIsLoggedIn()) {
                 navigateToLogin()

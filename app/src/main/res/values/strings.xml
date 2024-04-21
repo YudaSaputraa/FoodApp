@@ -121,4 +121,7 @@
     <string name="text_submit">Submit</string>
     <string name="text_all_data">All</string>
     <string name="text_confirm_change_password_dialog">Yakin mau ganti password?</string>
+    <string name="error_unknown">Terjadi kesalahan!\n</string>
+    <string name="error_wrong_password">Password anda salah!</string>
+    <string name="error_wrong_email">Email atau password salah!</string>
 </resources>
