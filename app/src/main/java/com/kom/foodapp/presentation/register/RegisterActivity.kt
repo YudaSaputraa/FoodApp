@@ -78,7 +78,6 @@ class RegisterActivity : AppCompatActivity() {
             val email = binding.layoutForm.etEmail.text.toString().trim()
             val password = binding.layoutForm.etPassword.text.toString().trim()
             registerProcess(fullName, email, password)
-            navigateToLogin()
         }
     }
 
@@ -93,11 +92,15 @@ class RegisterActivity : AppCompatActivity() {
                     doOnSuccess = {
                         binding.pbLoading.isVisible = false
                         binding.btnRegister.isVisible = true
-                        navigateToMain()
+                        navigateToLogin()
+                        Toast.makeText(this,
+                            getString(R.string.text_register_success), Toast.LENGTH_SHORT).show()
                     },
                     doOnError = {
                         binding.pbLoading.isVisible = false
+                        binding.btnRegister.isEnabled = true
                         binding.btnRegister.isVisible = true
+                        binding.btnRegister.text = getString(R.string.text_register)
                         Toast.makeText(
                             this,
                             getString(
@@ -119,7 +122,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun navigateToMain() {
-        startActivity(Intent(this, MainActivity::class.java).apply {
+        startActivity(Intent(this, LoginActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         })
     }
