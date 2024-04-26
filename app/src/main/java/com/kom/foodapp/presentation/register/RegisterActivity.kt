@@ -4,23 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputLayout
 import com.kom.foodapp.R
-import com.kom.foodapp.data.datasource.authentication.AuthDataSource
-import com.kom.foodapp.data.datasource.authentication.FirebaseAuthDataSource
-import com.kom.foodapp.data.repository.UserRepository
-import com.kom.foodapp.data.repository.UserRepositoryImpl
-import com.kom.foodapp.data.source.firebase.FirebaseService
-import com.kom.foodapp.data.source.firebase.FirebaseServiceImpl
 import com.kom.foodapp.databinding.ActivityRegisterBinding
 import com.kom.foodapp.presentation.login.LoginActivity
-import com.kom.foodapp.presentation.main.MainActivity
-import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.highLightWord
 import com.kom.foodapp.utils.proceedWhen
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -28,12 +20,7 @@ class RegisterActivity : AppCompatActivity() {
         ActivityRegisterBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: RegisterViewModel by viewModels {
-        val service: FirebaseService = FirebaseServiceImpl()
-        val authDataSource: AuthDataSource = FirebaseAuthDataSource(service)
-        val userRepository: UserRepository = UserRepositoryImpl(authDataSource)
-        GenericViewModelFactory.create(RegisterViewModel(userRepository))
-    }
+    private val registerViewModel: RegisterViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +73,7 @@ class RegisterActivity : AppCompatActivity() {
         email: String,
         password: String
     ) {
-        viewModel.doRegister(fullName, email, password)
+        registerViewModel.doRegister(fullName, email, password)
             .observe(this) { result ->
                 result.proceedWhen(
                     doOnSuccess = {

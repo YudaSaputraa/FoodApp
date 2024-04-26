@@ -17,6 +17,8 @@ navigationUiKtx = "2.7.7"
 room = "2.6.1"
 ksp = "1.9.10-1.0.13"
 coroutine = "1.7.3"
+koin = "3.5.6"
+
 
 
 retrofit = "2.9.0"
@@ -68,6 +70,9 @@ gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gr
 google-services = { group = "com.google.gms", name = "google-services", version.ref = "googleServices" }
 firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+
+# Koin
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -9,72 +9,22 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.kom.foodapp.R
-import com.kom.foodapp.data.datasource.authentication.AuthDataSource
-import com.kom.foodapp.data.datasource.authentication.FirebaseAuthDataSource
-import com.kom.foodapp.data.datasource.cart.CartDataSource
-import com.kom.foodapp.data.datasource.cart.CartDatabaseDataSource
-import com.kom.foodapp.data.datasource.category.CategoryApiDataSource
-import com.kom.foodapp.data.datasource.category.CategoryDataSource
-import com.kom.foodapp.data.datasource.menu.MenuApiDataSource
-import com.kom.foodapp.data.datasource.menu.MenuDataSource
-import com.kom.foodapp.data.datasource.user.UserPrefDataSource
-import com.kom.foodapp.data.datasource.user.UserPrefDataSourceImpl
 import com.kom.foodapp.data.model.Category
 import com.kom.foodapp.data.model.Menu
-import com.kom.foodapp.data.repository.CartRepositoryImpl
-import com.kom.foodapp.data.repository.CategoryRepository
-import com.kom.foodapp.data.repository.CategoryRepositoryImpl
-import com.kom.foodapp.data.repository.MenuRepository
-import com.kom.foodapp.data.repository.MenuRepositoryImpl
-import com.kom.foodapp.data.repository.UserPrefRepository
-import com.kom.foodapp.data.repository.UserPrefRepositoryImpl
-import com.kom.foodapp.data.repository.UserRepository
-import com.kom.foodapp.data.repository.UserRepositoryImpl
-import com.kom.foodapp.data.source.firebase.FirebaseService
-import com.kom.foodapp.data.source.firebase.FirebaseServiceImpl
-import com.kom.foodapp.data.source.local.database.AppDatabase
-import com.kom.foodapp.data.source.local.pref.UserPreference
-import com.kom.foodapp.data.source.local.pref.UserPreferenceImpl
-import com.kom.foodapp.data.source.network.services.FoodAppApiService
 import com.kom.foodapp.databinding.FragmentHomeBinding
 import com.kom.foodapp.presentation.detailmenu.DetailActivity
 import com.kom.foodapp.presentation.home.adapter.CategoryAdapter
 import com.kom.foodapp.presentation.home.adapter.MenuAdapter
-import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.proceedWhen
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
 
-    private val viewModel: HomeViewModel by viewModels {
-        val database = AppDatabase.getInstance(requireContext())
-        val apiService = FoodAppApiService.invoke()
-        val service: FirebaseService = FirebaseServiceImpl()
-        val menuDataSource: MenuDataSource = MenuApiDataSource(apiService)
-        val cartDataSource: CartDataSource = CartDatabaseDataSource(database.cartDao())
-        val authDataSource: AuthDataSource = FirebaseAuthDataSource(service)
-        val userRepository: UserRepository = UserRepositoryImpl(authDataSource)
-        val menuRepository: MenuRepository = MenuRepositoryImpl(menuDataSource, userRepository)
-        val categoryDataSource: CategoryDataSource = CategoryApiDataSource(apiService)
-        val categoryRepository: CategoryRepository = CategoryRepositoryImpl(categoryDataSource)
-        val cartRepository = CartRepositoryImpl(cartDataSource)
-        val userPrefPreference: UserPreference = UserPreferenceImpl(requireContext())
-        val userPrefDataSource: UserPrefDataSource = UserPrefDataSourceImpl(userPrefPreference)
-        val userPrefRepository: UserPrefRepository = UserPrefRepositoryImpl(userPrefDataSource)
-        GenericViewModelFactory.create(
-            HomeViewModel(
-                categoryRepository,
-                menuRepository,
-                cartRepository,
-                userRepository,
-                userPrefRepository
-            )
-        )
-    }
+    private val homeViewModel: HomeViewModel by viewModel()
 
     private var isDarkMode: Boolean = false
     private var menuAdapter: MenuAdapter? = null
@@ -97,7 +47,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val isUsingGridMode = viewModel.isUsingGridMode()
+        val isUsingGridMode = homeViewModel.isUsingGridMode()
         bindModeList(isUsingGridMode)
         setClickAction(isUsingGridMode)
         setIconFromPref(isUsingGridMode)
@@ -118,13 +68,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun setDisplayName() {
-        if (!viewModel.userIsLoggedIn()) {
+        if (!homeViewModel.userIsLoggedIn()) {
             binding.layoutHeader.tvName.apply {
                 text = getString(R.string.text_user_not_login)
                 setTypeface(null, Typeface.ITALIC)
             }
         } else {
-            val currentUser = viewModel.getCurrentUser()
+            val currentUser = homeViewModel.getCurrentUser()
             binding.layoutHeader.tvName.text =
                 getString(R.string.text_display_name, currentUser?.fullName)
         }
@@ -149,7 +99,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun getMenuData(categoryName: String? = null) {
-        viewModel.getMenu(categoryName).observe(viewLifecycleOwner) {
+        homeViewModel.getMenu(categoryName).observe(viewLifecycleOwner) {
             it.proceedWhen(
                 doOnSuccess = {
                     binding.layoutState.root.isVisible = false
@@ -216,7 +166,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun getCategoryData() {
-        viewModel.getCategories().observe(viewLifecycleOwner) {
+        homeViewModel.getCategories().observe(viewLifecycleOwner) {
             it.proceedWhen(
                 doOnSuccess = {
                     binding.layoutStateCategory.root.isVisible = false
@@ -296,7 +246,7 @@ class HomeFragment : Fragment() {
                 }
 
                 override fun onItemAddedToCart(item: Menu) {
-                    viewModel.addItemToCart(item)
+                    homeViewModel.addItemToCart(item)
                 }
 
             }
@@ -341,7 +291,7 @@ class HomeFragment : Fragment() {
                 binding.ivMenuList.setImageResource(R.drawable.ic_menu_grid)
             bindModeList(isGridMode)
             loadMenuData()
-            viewModel.setUsingGridMode(isGridMode)
+            homeViewModel.setUsingGridMode(isGridMode)
         }
     }
 

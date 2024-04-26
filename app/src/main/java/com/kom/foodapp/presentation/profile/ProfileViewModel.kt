@@ -13,17 +13,17 @@ import com.kom.foodapp.data.repository.UserRepositoryImpl
 import com.kom.foodapp.data.source.firebase.FirebaseServiceImpl
 import kotlinx.coroutines.Dispatchers
 
-class ProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
+class ProfileViewModel(
+    private val userRepository: UserRepository,
+    private val profileDataSource: ProfileDataSource
+) : ViewModel() {
 
-    private val profileDataSource: ProfileDataSource = ProfileDataSourceImpl()
     private val _profileData = MutableLiveData<Profile>()
 
     val profileData: LiveData<Profile>
         get() = _profileData
 
     val isEditProfile = MutableLiveData(false)
-
-    constructor() : this(UserRepositoryImpl(FirebaseAuthDataSource(FirebaseServiceImpl())))
 
     fun changeEditMode() {
         val currentValue = isEditProfile.value ?: false

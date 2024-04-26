@@ -5,33 +5,23 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.kom.foodapp.R
-import com.kom.foodapp.data.datasource.cart.CartDataSource
-import com.kom.foodapp.data.datasource.cart.CartDatabaseDataSource
 import com.kom.foodapp.data.model.Menu
-import com.kom.foodapp.data.repository.CartRepository
-import com.kom.foodapp.data.repository.CartRepositoryImpl
-import com.kom.foodapp.data.source.local.database.AppDatabase
 import com.kom.foodapp.databinding.ActivityDetailBinding
-import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.formatToRupiah
 import com.kom.foodapp.utils.proceedWhen
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class DetailActivity : AppCompatActivity() {
     private val binding: ActivityDetailBinding by lazy {
         ActivityDetailBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: DetailMenuViewModel by viewModels {
-        val database = AppDatabase.getInstance(this)
-        val dataSource: CartDataSource = CartDatabaseDataSource(database.cartDao())
-        val cartRepository: CartRepository = CartRepositoryImpl(dataSource)
-        GenericViewModelFactory.create(
-            DetailMenuViewModel(intent?.extras, cartRepository)
-        )
+    private val detailMenuViewModel: DetailMenuViewModel by viewModel {
+        parametersOf(intent.extras)
     }
 
     companion object {
@@ -47,8 +37,8 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        bindMenu(viewModel.menu)
-        navigateToGoogleMaps(viewModel.menu)
+        bindMenu(detailMenuViewModel.menu)
+        navigateToGoogleMaps(detailMenuViewModel.menu)
         observeData()
         setClickListener()
 
@@ -59,10 +49,10 @@ class DetailActivity : AppCompatActivity() {
             onBackPressed()
         }
         binding.layoutAddCart.ivMinus.setOnClickListener {
-            viewModel.decrementItem()
+            detailMenuViewModel.decrementItem()
         }
         binding.layoutAddCart.ivPlus.setOnClickListener {
-            viewModel.incrementItem()
+            detailMenuViewModel.incrementItem()
         }
         binding.layoutAddCart.btnAddToCart.setOnClickListener {
             addMenuToCart()
@@ -70,7 +60,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun addMenuToCart() {
-        viewModel.addItemToCart().observe(this) {
+        detailMenuViewModel.addItemToCart().observe(this) {
             it.proceedWhen(
                 doOnSuccess = {
                     Toast.makeText(
@@ -96,13 +86,13 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun observeData() {
-        viewModel.priceLiveData.observe(this) {
+        detailMenuViewModel.priceLiveData.observe(this) {
             binding.layoutAddCart.btnAddToCart.isEnabled = it != 0.0
             binding.layoutAddCart.btnAddToCart.text = getString(
                 R.string.placeholder_total_price, it.formatToRupiah()
             )
         }
-        viewModel.menuCountLiveData.observe(this) {
+        detailMenuViewModel.menuCountLiveData.observe(this) {
             binding.layoutAddCart.tvQuantity.text = it.toString()
         }
     }
@@ -122,10 +112,10 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun navigateToGoogleMaps(menu: Menu?) {
-        menu?.let { item->
-        binding.layoutDetailLocation.tvDetailLocationAddress.setOnClickListener {
-            openGoogleMaps(item.locationUrl)
-        }
+        menu?.let { item ->
+            binding.layoutDetailLocation.tvDetailLocationAddress.setOnClickListener {
+                openGoogleMaps(item.locationUrl)
+            }
         }
     }
 

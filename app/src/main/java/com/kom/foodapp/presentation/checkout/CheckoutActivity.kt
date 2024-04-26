@@ -3,36 +3,19 @@ package com.kom.foodapp.presentation.checkout
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.kom.foodapp.R
-import com.kom.foodapp.data.datasource.authentication.AuthDataSource
-import com.kom.foodapp.data.datasource.authentication.FirebaseAuthDataSource
-import com.kom.foodapp.data.datasource.cart.CartDataSource
-import com.kom.foodapp.data.datasource.cart.CartDatabaseDataSource
-import com.kom.foodapp.data.datasource.menu.MenuApiDataSource
-import com.kom.foodapp.data.datasource.menu.MenuDataSource
-import com.kom.foodapp.data.repository.CartRepository
-import com.kom.foodapp.data.repository.CartRepositoryImpl
-import com.kom.foodapp.data.repository.MenuRepository
-import com.kom.foodapp.data.repository.MenuRepositoryImpl
-import com.kom.foodapp.data.repository.UserRepository
-import com.kom.foodapp.data.repository.UserRepositoryImpl
-import com.kom.foodapp.data.source.firebase.FirebaseService
-import com.kom.foodapp.data.source.firebase.FirebaseServiceImpl
-import com.kom.foodapp.data.source.local.database.AppDatabase
-import com.kom.foodapp.data.source.network.services.FoodAppApiService
 import com.kom.foodapp.databinding.ActivityCheckoutBinding
 import com.kom.foodapp.databinding.LayoutDialogOrderBinding
 import com.kom.foodapp.presentation.checkout.adapter.PriceListAdapter
 import com.kom.foodapp.presentation.common.adapter.CartListAdapter
 import com.kom.foodapp.presentation.login.LoginActivity
-import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.formatToRupiah
 import com.kom.foodapp.utils.proceedWhen
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -42,20 +25,7 @@ class CheckoutActivity : AppCompatActivity() {
         ActivityCheckoutBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: CheckoutViewModel by viewModels {
-        val database = AppDatabase.getInstance(this)
-        val dataSource: CartDataSource = CartDatabaseDataSource(database.cartDao())
-        val cartRepository: CartRepository = CartRepositoryImpl(dataSource)
-        val service: FirebaseService = FirebaseServiceImpl()
-        val apiService = FoodAppApiService.invoke()
-        val authDataSource: AuthDataSource = FirebaseAuthDataSource(service)
-        val userRepository: UserRepository = UserRepositoryImpl(authDataSource)
-        val menuDataSource: MenuDataSource = MenuApiDataSource(apiService)
-        val menuRepository: MenuRepository = MenuRepositoryImpl(menuDataSource, userRepository)
-        GenericViewModelFactory.create(
-            CheckoutViewModel(cartRepository, userRepository, menuRepository)
-        )
-    }
+    private val checkoutViewModel: CheckoutViewModel by viewModel()
 
     private val adapter: CartListAdapter by lazy {
         CartListAdapter()
@@ -76,7 +46,7 @@ class CheckoutActivity : AppCompatActivity() {
 
     private fun checkUserLoginStatus() {
         lifecycleScope.launch {
-            if (!viewModel.isUserLoggedIn()) {
+            if (!checkoutViewModel.isUserLoggedIn()) {
                 navigateToLogin()
             }
         }
@@ -97,14 +67,14 @@ class CheckoutActivity : AppCompatActivity() {
 
         val currentDateAndTime = SimpleDateFormat("dd MMMM yyyy HH:mm:ss").format(Date())
         dialogBinding.tvDateTime.text = currentDateAndTime
-        viewModel.checkoutData.value?.payload?.let { (carts, _, totalPrice) ->
+        checkoutViewModel.checkoutData.value?.payload?.let { (carts, _, totalPrice) ->
             dialogBinding.tvTotalPriceSuccess.text = totalPrice.formatToRupiah()
         }
         dialogBinding.rvSummaryOrder.adapter = priceItemAdapter
         dialog.show()
 
         dialogBinding.btnBackOnSuccess.setOnClickListener {
-            viewModel.deleteAllCarts()
+            checkoutViewModel.deleteAllCarts()
             dialog.dismiss()
             finish()
         }
@@ -121,7 +91,7 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun checkoutProcess() {
-        viewModel.checkoutCart().observe(this) { result ->
+        checkoutViewModel.checkoutCart().observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
                     binding.layoutState.root.isVisible = false
@@ -134,7 +104,7 @@ class CheckoutActivity : AppCompatActivity() {
                     binding.layoutButtonOrder.btnOrder.isVisible = true
                     binding.layoutButtonOrder.btnOrder.isEnabled = true
                     binding.layoutButtonOrder.btnOrder.setTextColor(resources.getColor(R.color.white))
-                    viewModel.deleteAllCarts()
+                    checkoutViewModel.deleteAllCarts()
                     showOrderSuccessDialog()
 
                 },
@@ -180,7 +150,7 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun observeData() {
-        viewModel.checkoutData.observe(this) { result ->
+        checkoutViewModel.checkoutData.observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
                     binding.layoutState.root.isVisible = false
