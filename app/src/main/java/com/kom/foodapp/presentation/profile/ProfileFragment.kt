@@ -10,32 +10,18 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import coil.load
 import com.kom.foodapp.R
-import com.kom.foodapp.data.datasource.authentication.AuthDataSource
-import com.kom.foodapp.data.datasource.authentication.FirebaseAuthDataSource
-import com.kom.foodapp.data.repository.UserRepository
-import com.kom.foodapp.data.repository.UserRepositoryImpl
-import com.kom.foodapp.data.source.firebase.FirebaseService
-import com.kom.foodapp.data.source.firebase.FirebaseServiceImpl
 import com.kom.foodapp.databinding.FragmentProfileBinding
 import com.kom.foodapp.presentation.login.LoginActivity
-import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.proceedWhen
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
-    private val profileViewModel: ProfileViewModel by viewModels()
-
-    private val viewModel: ProfileViewModel by viewModels {
-        val service: FirebaseService = FirebaseServiceImpl()
-        val authDataSource: AuthDataSource = FirebaseAuthDataSource(service)
-        val userRepository: UserRepository = UserRepositoryImpl(authDataSource)
-        GenericViewModelFactory.create(ProfileViewModel(userRepository))
-    }
+    private val profileViewModel: ProfileViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +36,6 @@ class ProfileFragment : Fragment() {
         editProfile()
         setClickListener()
         loggedOut()
-        profileViewModel.fetchProfileData()
         observeProfileData()
     }
 
@@ -75,7 +60,7 @@ class ProfileFragment : Fragment() {
             .setPositiveButton(
                 "Ya"
             ) { dialog, id ->
-                viewModel.requestChangePasswordByEmail()
+                profileViewModel.requestChangePasswordByEmail()
                 requestChangePasswordDialog()
             }
             .setNegativeButton(
@@ -98,7 +83,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun observeProfileData() {
-        val currentUser = viewModel.getCurrentUser()
+        val currentUser = profileViewModel.getCurrentUser()
+        profileViewModel.fetchProfileData()
         profileViewModel.profileData.observe(viewLifecycleOwner, Observer { profile ->
             binding.layoutProfile.ivProfile.load(profile.image) {
                 crossfade(true)
@@ -111,7 +97,7 @@ class ProfileFragment : Fragment() {
 
     private fun loggedOut() {
         binding.btnLogout.setOnClickListener {
-            viewModel.isUserLoggedOut()
+            profileViewModel.isUserLoggedOut()
             Toast.makeText(requireContext(), "Logout Success!", Toast.LENGTH_SHORT).show()
             navigateToLogin()
             requireActivity().supportFragmentManager.popBackStack(
@@ -160,7 +146,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun changeFullNameFormValidation(newFullName: String): Boolean {
-        val currentFullName = viewModel.getCurrentUser()
+        val currentFullName = profileViewModel.getCurrentUser()
         return if (newFullName == currentFullName?.fullName) {
             binding.layoutProfile.tilFullName.isErrorEnabled = true
             binding.layoutProfile.tilFullName.error =
@@ -179,7 +165,7 @@ class ProfileFragment : Fragment() {
 
 
     private fun changeProfileProcess(newFullName: String) {
-        viewModel.updateProfile(newFullName).observe(viewLifecycleOwner) { result ->
+        profileViewModel.updateProfile(newFullName).observe(viewLifecycleOwner) { result ->
             result.proceedWhen(
                 doOnSuccess = {
                     binding.btnSave.isVisible = false

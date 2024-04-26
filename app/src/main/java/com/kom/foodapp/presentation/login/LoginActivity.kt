@@ -9,36 +9,24 @@ import android.util.Patterns
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputLayout
 import com.kom.foodapp.R
-import com.kom.foodapp.data.datasource.authentication.AuthDataSource
-import com.kom.foodapp.data.datasource.authentication.FirebaseAuthDataSource
-import com.kom.foodapp.data.repository.UserRepository
-import com.kom.foodapp.data.repository.UserRepositoryImpl
-import com.kom.foodapp.data.source.firebase.FirebaseService
-import com.kom.foodapp.data.source.firebase.FirebaseServiceImpl
 import com.kom.foodapp.databinding.ActivityLoginBinding
 import com.kom.foodapp.presentation.main.MainActivity
 import com.kom.foodapp.presentation.register.RegisterActivity
-import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.highLightWord
 import com.kom.foodapp.utils.proceedWhen
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity() {
     private val binding: ActivityLoginBinding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: LoginViewModel by viewModels {
-        val service: FirebaseService = FirebaseServiceImpl()
-        val authDataSource: AuthDataSource = FirebaseAuthDataSource(service)
-        val userRepository: UserRepository = UserRepositoryImpl(authDataSource)
-        GenericViewModelFactory.create(LoginViewModel(userRepository))
-    }
+    private val loginViewModel: LoginViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +83,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun forgetPasswordRequestProcess(email: String) {
-        viewModel.doRequestChangePasswordByEmailWithoutLogin(email).observe(this) { result ->
+        loginViewModel.doRequestChangePasswordByEmailWithoutLogin(email).observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
                     requestChangePasswordDialogSuccess()
@@ -142,7 +130,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginProcess(email: String, password: String) {
-        viewModel.doLogin(email, password).observe(this) { result ->
+        loginViewModel.doLogin(email, password).observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
                     binding.pbLoading.isVisible = false

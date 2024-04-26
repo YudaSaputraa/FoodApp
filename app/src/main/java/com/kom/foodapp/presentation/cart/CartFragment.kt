@@ -7,60 +7,38 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.kom.foodapp.R
-import com.kom.foodapp.data.datasource.authentication.AuthDataSource
-import com.kom.foodapp.data.datasource.authentication.FirebaseAuthDataSource
-import com.kom.foodapp.data.datasource.cart.CartDataSource
-import com.kom.foodapp.data.datasource.cart.CartDatabaseDataSource
 import com.kom.foodapp.data.model.Cart
-import com.kom.foodapp.data.repository.CartRepository
-import com.kom.foodapp.data.repository.CartRepositoryImpl
-import com.kom.foodapp.data.repository.UserRepository
-import com.kom.foodapp.data.repository.UserRepositoryImpl
-import com.kom.foodapp.data.source.firebase.FirebaseService
-import com.kom.foodapp.data.source.firebase.FirebaseServiceImpl
-import com.kom.foodapp.data.source.local.database.AppDatabase
 import com.kom.foodapp.databinding.FragmentCartBinding
 import com.kom.foodapp.presentation.checkout.CheckoutActivity
 import com.kom.foodapp.presentation.common.adapter.CartListAdapter
 import com.kom.foodapp.presentation.common.adapter.CartListener
 import com.kom.foodapp.presentation.login.LoginActivity
-import com.kom.foodapp.utils.GenericViewModelFactory
 import com.kom.foodapp.utils.formatToRupiah
 import com.kom.foodapp.utils.hideKeyboard
 import com.kom.foodapp.utils.proceedWhen
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CartFragment : Fragment() {
     private lateinit var binding: FragmentCartBinding
-    private val viewModel: CartViewModel by viewModels {
-        val database = AppDatabase.getInstance(requireContext())
-        val dataSource: CartDataSource = CartDatabaseDataSource(database.cartDao())
-        val cartRepository: CartRepository = CartRepositoryImpl(dataSource)
-        val service: FirebaseService = FirebaseServiceImpl()
-        val authDataSource: AuthDataSource = FirebaseAuthDataSource(service)
-        val userRepository: UserRepository = UserRepositoryImpl(authDataSource)
-        GenericViewModelFactory.create(
-            CartViewModel(cartRepository, userRepository)
-        )
-    }
+    private val cartViewModel: CartViewModel by viewModel()
 
     private val adapter: CartListAdapter by lazy {
         CartListAdapter(object : CartListener {
             override fun onPlusTotalItemCartClicked(cart: Cart) {
-                viewModel.increaseCart(cart)
+                cartViewModel.increaseCart(cart)
             }
 
             override fun onMinusTotalItemCartClicked(cart: Cart) {
-                viewModel.decreaseCart(cart)
+                cartViewModel.decreaseCart(cart)
             }
 
             override fun onRemoveCartClicked(cart: Cart) {
-                viewModel.removeCart(cart)
+                cartViewModel.removeCart(cart)
             }
 
             override fun onUserDoneEditingNotes(cart: Cart) {
-                viewModel.setCartNotes(cart)
+                cartViewModel.setCartNotes(cart)
                 hideKeyboard()
             }
 
@@ -77,7 +55,6 @@ class CartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        tryNavigateCheckout()
         setList()
         observeData()
         setClickListener()
@@ -85,7 +62,7 @@ class CartFragment : Fragment() {
 
     private fun setClickListener() {
         binding.layoutBtnTotal.btnOrder.setOnClickListener {
-            if (!viewModel.userIsLoggedIn()) {
+            if (!cartViewModel.userIsLoggedIn()) {
                 navigateToLogin()
             } else {
                 startActivity(Intent(requireContext(), CheckoutActivity::class.java))
@@ -100,7 +77,7 @@ class CartFragment : Fragment() {
     }
 
     private fun observeData() {
-        viewModel.getAllCarts().observe(viewLifecycleOwner) { result ->
+        cartViewModel.getAllCarts().observe(viewLifecycleOwner) { result ->
             result.proceedWhen(
                 doOnLoading = {
                     binding.layoutState.root.isVisible = true

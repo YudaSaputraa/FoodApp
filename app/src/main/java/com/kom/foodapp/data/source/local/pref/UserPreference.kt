@@ -1,6 +1,7 @@
 package com.kom.foodapp.data.source.local.pref
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.kom.foodapp.utils.SharedPreferenceUtils
 import com.kom.foodapp.utils.SharedPreferenceUtils.set
 
@@ -14,10 +15,7 @@ interface UserPreference {
     fun setUsingGridMode(isUsingGridMode: Boolean)
 }
 
-class UserPreferenceImpl(private val context: Context) : UserPreference {
-
-    private val pref = SharedPreferenceUtils.createPreference(context, PREF_NAME)
-
+class UserPreferenceImpl(private val pref : SharedPreferences) : UserPreference {
 
     override fun isUsingGridMode(): Boolean = pref.getBoolean(KEY_IS_USING_GRID_MODE, false)
 
