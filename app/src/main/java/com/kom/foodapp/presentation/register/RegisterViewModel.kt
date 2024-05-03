@@ -13,9 +13,8 @@ class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
     fun doRegister(
         fullName: String,
         email: String,
-        password: String
-    ) =
-        repository
-            .doRegister(fullName, email, password)
-            .asLiveData(Dispatchers.IO)
+        password: String,
+    ) = repository
+        .doRegister(fullName, email, password)
+        .asLiveData(Dispatchers.IO)
 }

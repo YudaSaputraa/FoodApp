@@ -27,7 +27,10 @@ class DetailActivity : AppCompatActivity() {
     companion object {
         const val EXTRAS_DETAIL_MENU = "EXTRAS_DETAIL_MENU"
 
-        fun startActivity(context: Context, menu: Menu) {
+        fun startActivity(
+            context: Context,
+            menu: Menu,
+        ) {
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra(EXTRAS_DETAIL_MENU, menu)
             context.startActivity(intent)
@@ -41,7 +44,6 @@ class DetailActivity : AppCompatActivity() {
         navigateToGoogleMaps(detailMenuViewModel.menu)
         observeData()
         setClickListener()
-
     }
 
     private fun setClickListener() {
@@ -65,22 +67,25 @@ class DetailActivity : AppCompatActivity() {
                 doOnSuccess = {
                     Toast.makeText(
                         this,
-                        getString(R.string.text_add_cart_on_success), Toast.LENGTH_SHORT
+                        getString(R.string.text_add_cart_on_success),
+                        Toast.LENGTH_SHORT,
                     ).show()
                     finish()
                 },
                 doOnError = {
                     Toast.makeText(
                         this,
-                        getString(R.string.text_add_cart_on_error), Toast.LENGTH_SHORT
+                        getString(R.string.text_add_cart_on_error),
+                        Toast.LENGTH_SHORT,
                     ).show()
                 },
                 doOnLoading = {
                     Toast.makeText(
                         this,
-                        getString(R.string.text_add_cart_on_loading), Toast.LENGTH_SHORT
+                        getString(R.string.text_add_cart_on_loading),
+                        Toast.LENGTH_SHORT,
                     ).show()
-                }
+                },
             )
         }
     }
@@ -88,9 +93,10 @@ class DetailActivity : AppCompatActivity() {
     private fun observeData() {
         detailMenuViewModel.priceLiveData.observe(this) {
             binding.layoutAddCart.btnAddToCart.isEnabled = it != 0.0
-            binding.layoutAddCart.btnAddToCart.text = getString(
-                R.string.placeholder_total_price, it.formatToRupiah()
-            )
+            binding.layoutAddCart.btnAddToCart.text =
+                getString(
+                    R.string.placeholder_total_price, it.formatToRupiah(),
+                )
         }
         detailMenuViewModel.menuCountLiveData.observe(this) {
             binding.layoutAddCart.tvQuantity.text = it.toString()
@@ -101,13 +107,11 @@ class DetailActivity : AppCompatActivity() {
         menu?.let { item ->
             binding.layoutDetailMenu.ivDetailMenu.load(item.imageUrl) {
                 crossfade(true)
-
             }
             binding.layoutDetailMenu.tvDetailMenuName.text = menu.name
             binding.layoutDetailMenu.tvDetailMenuDesc.text = menu.desc
             binding.layoutDetailMenu.tvDetailMenuPrice.text = menu.price.formatToRupiah()
             binding.layoutDetailLocation.tvDetailLocationAddress.text = menu.locationAddress
-
         }
     }
 
@@ -124,5 +128,4 @@ class DetailActivity : AppCompatActivity() {
         val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
         startActivity(mapIntent)
     }
-
 }

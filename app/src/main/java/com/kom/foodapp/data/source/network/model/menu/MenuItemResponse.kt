@@ -9,7 +9,6 @@ Github : https://github.com/YudaSaputraa
  **/
 @Keep
 data class MenuItemResponse(
-
     @SerializedName("image_url")
     val imgUrl: String?,
     @SerializedName("nama")
@@ -22,4 +21,4 @@ data class MenuItemResponse(
     val menuDesc: String?,
     @SerializedName("alamat_resto")
     val restoAddress: String?,
-    )
+)

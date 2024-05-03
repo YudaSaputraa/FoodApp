@@ -1,7 +1,6 @@
 package com.kom.foodapp
 
 import android.app.Application
-import com.kom.foodapp.data.source.local.database.AppDatabase
 import com.kom.foodapp.di.AppModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger

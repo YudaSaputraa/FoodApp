@@ -1,6 +1,5 @@
 package com.kom.foodapp.data.mapper
 
-import android.view.MenuItem
 import com.kom.foodapp.data.model.Menu
 import com.kom.foodapp.data.source.network.model.menu.MenuItemResponse
 
@@ -17,8 +16,7 @@ fun MenuItemResponse?.toMenu() =
         imageUrl = this?.imgUrl.orEmpty(),
         desc = this?.menuDesc.orEmpty(),
         locationAddress = this?.restoAddress.orEmpty(),
-        locationUrl = "https://maps.app.goo.gl/h4wQKqaBuXzftGK77"
+        locationUrl = "https://maps.app.goo.gl/h4wQKqaBuXzftGK77",
     )
 
-fun Collection<MenuItemResponse>?.toMenus() =
-    this?.map { it.toMenu() } ?: listOf()
+fun Collection<MenuItemResponse>?.toMenus() = this?.map { it.toMenu() } ?: listOf()

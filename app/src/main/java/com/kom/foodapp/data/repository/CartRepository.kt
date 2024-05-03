@@ -21,39 +21,43 @@ interface CartRepository {
     fun createCart(
         menu: Menu,
         quantity: Int,
-        notes: String? = null
+        notes: String? = null,
     ): Flow<ResultWrapper<Boolean>>
 
     fun decreaseCartItem(item: Cart): Flow<ResultWrapper<Boolean>>
+
     fun increaseCartItem(item: Cart): Flow<ResultWrapper<Boolean>>
+
     fun setCartNotes(item: Cart): Flow<ResultWrapper<Boolean>>
+
     fun deleteCart(item: Cart): Flow<ResultWrapper<Boolean>>
+
     fun deleteAllCarts(): Flow<ResultWrapper<Unit>>
 
     fun getUserCartData(): Flow<ResultWrapper<Pair<List<Cart>, Double>>>
-    fun getCheckoutData(): Flow<ResultWrapper<Triple<List<Cart>, List<PriceItem>, Double>>>
 
+    fun getCheckoutData(): Flow<ResultWrapper<Triple<List<Cart>, List<PriceItem>, Double>>>
 }
 
 class CartRepositoryImpl(private val cartDataSource: CartDataSource) : CartRepository {
     override fun createCart(
         menu: Menu,
         quantity: Int,
-        notes: String?
+        notes: String?,
     ): Flow<ResultWrapper<Boolean>> {
         return menu.id?.let { menuId ->
             proceedFlow {
-                val affectedRow = cartDataSource.insertCart(
-                    CartEntity(
-                        menuId = menuId,
-                        menuName = menu.name,
-                        menuImgUrl = menu.imageUrl,
-                        menuPrice = menu.price,
-                        itemQuantity = quantity,
-                        itemNotes = notes
-
+                val affectedRow =
+                    cartDataSource.insertCart(
+                        CartEntity(
+                            menuId = menuId,
+                            menuName = menu.name,
+                            menuImgUrl = menu.imageUrl,
+                            menuPrice = menu.price,
+                            itemQuantity = quantity,
+                            itemNotes = notes,
+                        ),
                     )
-                )
                 delay(1000)
                 affectedRow > 0
             }
@@ -63,9 +67,10 @@ class CartRepositoryImpl(private val cartDataSource: CartDataSource) : CartRepos
     }
 
     override fun decreaseCartItem(item: Cart): Flow<ResultWrapper<Boolean>> {
-        val modifiedCart = item.copy().apply {
-            itemQuantity -= 1
-        }
+        val modifiedCart =
+            item.copy().apply {
+                itemQuantity -= 1
+            }
         return if (modifiedCart.itemQuantity <= 0) {
             proceedFlow { cartDataSource.deleteCart(item.toCartEntity()) > 0 }
         } else {
@@ -74,11 +79,11 @@ class CartRepositoryImpl(private val cartDataSource: CartDataSource) : CartRepos
     }
 
     override fun increaseCartItem(item: Cart): Flow<ResultWrapper<Boolean>> {
-        val modifiedCart = item.copy().apply {
-            itemQuantity += 1
-        }
+        val modifiedCart =
+            item.copy().apply {
+                itemQuantity += 1
+            }
         return proceedFlow { cartDataSource.updateCart(modifiedCart.toCartEntity()) > 0 }
-
     }
 
     override fun setCartNotes(item: Cart): Flow<ResultWrapper<Boolean>> {
@@ -94,7 +99,6 @@ class CartRepositoryImpl(private val cartDataSource: CartDataSource) : CartRepos
             cartDataSource.deleteAll()
         }
     }
-
 
     override fun getUserCartData(): Flow<ResultWrapper<Pair<List<Cart>, Double>>> {
         return cartDataSource.getAllCarts()
@@ -118,9 +122,10 @@ class CartRepositoryImpl(private val cartDataSource: CartDataSource) : CartRepos
             .map {
                 proceed {
                     val result = it.toCartList()
-                    val priceItemList = result.map {
-                        PriceItem(it.menuName, it.menuPrice * it.itemQuantity)
-                    }
+                    val priceItemList =
+                        result.map {
+                            PriceItem(it.menuName, it.menuPrice * it.itemQuantity)
+                        }
                     val totalPrice = priceItemList.sumOf { it.total }
                     Triple(result, priceItemList, totalPrice)
                 }
@@ -132,5 +137,4 @@ class CartRepositoryImpl(private val cartDataSource: CartDataSource) : CartRepos
                 delay(2000)
             }
     }
-
 }

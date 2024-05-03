@@ -10,7 +10,7 @@ Written by Komang Yuda Saputra
 Github : https://github.com/YudaSaputraa
  **/
 class MenuApiDataSource(
-    private val service: FoodAppApiService
+    private val service: FoodAppApiService,
 ) : MenuDataSource {
     override suspend fun getMenuData(categoryName: String?): MenuResponse {
         return service.getMenu(categoryName)
@@ -19,5 +19,4 @@ class MenuApiDataSource(
     override suspend fun createOrder(payload: CheckoutRequestPayload): CheckoutResponse {
         return service.createOrder(payload)
     }
-
 }

@@ -19,7 +19,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
-
 class CheckoutActivity : AppCompatActivity() {
     private val binding: ActivityCheckoutBinding by lazy {
         ActivityCheckoutBinding.inflate(layoutInflater)
@@ -52,13 +51,13 @@ class CheckoutActivity : AppCompatActivity() {
         }
     }
 
-
     private fun navigateToLogin() {
-        startActivity(Intent(this, LoginActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-        })
+        startActivity(
+            Intent(this, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
     }
-
 
     private fun showOrderSuccessDialog() {
         val dialog = Dialog(this)
@@ -79,7 +78,6 @@ class CheckoutActivity : AppCompatActivity() {
             finish()
         }
     }
-
 
     private fun setActionListener() {
         binding.layoutHeader.ivBack.setOnClickListener {
@@ -106,7 +104,6 @@ class CheckoutActivity : AppCompatActivity() {
                     binding.layoutButtonOrder.btnOrder.setTextColor(resources.getColor(R.color.white))
                     checkoutViewModel.deleteAllCarts()
                     showOrderSuccessDialog()
-
                 },
                 doOnLoading = {
                     binding.layoutState.root.isVisible = true
@@ -119,7 +116,6 @@ class CheckoutActivity : AppCompatActivity() {
                     binding.layoutButtonOrder.btnOrder.isEnabled = false
                     binding.layoutButtonOrder.tvTotalPrice.text =
                         getString(R.string.text_empty_price)
-
                 },
                 doOnError = {
                     binding.layoutState.root.isVisible = true
@@ -144,7 +140,7 @@ class CheckoutActivity : AppCompatActivity() {
                     binding.layoutContent.root.isVisible = false
                     binding.layoutContent.rvItem.isVisible = false
                     binding.layoutButtonOrder.btnOrder.isEnabled = false
-                }
+                },
             )
         }
     }
@@ -168,7 +164,6 @@ class CheckoutActivity : AppCompatActivity() {
                         binding.layoutButtonOrder.tvTotalPrice.text = totalPrice.formatToRupiah()
                         priceItemAdapter.submitData(priceItems)
                     }
-
                 },
                 doOnLoading = {
                     binding.layoutState.root.isVisible = true
@@ -181,7 +176,6 @@ class CheckoutActivity : AppCompatActivity() {
                     binding.layoutButtonOrder.btnOrder.isEnabled = false
                     binding.layoutButtonOrder.tvTotalPrice.text =
                         getString(R.string.text_empty_price)
-
                 },
                 doOnError = {
                     binding.layoutState.root.isVisible = true
@@ -209,7 +203,7 @@ class CheckoutActivity : AppCompatActivity() {
                     binding.layoutContent.root.isVisible = true
                     binding.layoutContent.rvItem.isVisible = true
                     binding.layoutButtonOrder.btnOrder.isEnabled = false
-                }
+                },
             )
         }
     }

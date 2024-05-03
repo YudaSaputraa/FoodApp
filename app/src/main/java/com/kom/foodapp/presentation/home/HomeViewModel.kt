@@ -21,14 +21,14 @@ class HomeViewModel(
     private val menuRepository: MenuRepository,
     private val cartRepository: CartRepository,
     private val userRepository: UserRepository,
-    private val userPrefRepository: UserPrefRepository
+    private val userPrefRepository: UserPrefRepository,
 ) : ViewModel() {
-    val menuCountLiveData = MutableLiveData(0).apply {
-        postValue(0)
-    }
+    val menuCountLiveData =
+        MutableLiveData(0).apply {
+            postValue(0)
+        }
 
-    fun getMenu(categoryName: String? = null) =
-        menuRepository.getMenu(categoryName).asLiveData(Dispatchers.IO)
+    fun getMenu(categoryName: String? = null) = menuRepository.getMenu(categoryName).asLiveData(Dispatchers.IO)
 
     fun getCategories() = categoryRepository.getCategories().asLiveData(Dispatchers.IO)
 
@@ -46,16 +46,17 @@ class HomeViewModel(
                     },
                     doOnEmpty = {
                         Log.d(TAG, "addItemToCart: Empty!")
-                    }
+                    },
                 )
             }
         }
     }
 
     fun getCurrentUser() = userRepository.getCurrentUser()
+
     fun userIsLoggedIn() = userRepository.isLoggedIn()
 
     fun isUsingGridMode() = userPrefRepository.isUsingGridMode()
-    fun setUsingGridMode(isUsingGridMode: Boolean) =
-        userPrefRepository.setUsingGridMode(isUsingGridMode)
+
+    fun setUsingGridMode(isUsingGridMode: Boolean) = userPrefRepository.setUsingGridMode(isUsingGridMode)
 }

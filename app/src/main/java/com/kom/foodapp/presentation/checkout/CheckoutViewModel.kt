@@ -13,9 +13,8 @@ import kotlinx.coroutines.launch
 class CheckoutViewModel(
     private val cartRepository: CartRepository,
     private val userRepository: UserRepository,
-    private val menuRepository: MenuRepository
+    private val menuRepository: MenuRepository,
 ) : ViewModel() {
-
     val checkoutData = cartRepository.getCheckoutData().asLiveData(Dispatchers.IO)
 
     fun deleteAllCarts() {
@@ -24,10 +23,10 @@ class CheckoutViewModel(
         }
     }
 
-    fun checkoutCart() = menuRepository.createOrder(
-        checkoutData.value?.payload?.first.orEmpty()
-    ).asLiveData(Dispatchers.IO)
+    fun checkoutCart() =
+        menuRepository.createOrder(
+            checkoutData.value?.payload?.first.orEmpty(),
+        ).asLiveData(Dispatchers.IO)
 
     fun isUserLoggedIn() = userRepository.isLoggedIn()
-
 }

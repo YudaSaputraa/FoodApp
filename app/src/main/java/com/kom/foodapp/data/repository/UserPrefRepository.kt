@@ -8,6 +8,7 @@ Github : https://github.com/YudaSaputraa
  **/
 interface UserPrefRepository {
     fun isUsingGridMode(): Boolean
+
     fun setUsingGridMode(isUsingGridMode: Boolean)
 }
 
@@ -17,7 +18,6 @@ class UserPrefRepositoryImpl(private val dataSource: UserPrefDataSource) : UserP
     }
 
     override fun setUsingGridMode(isUsingGridMode: Boolean) {
-      return dataSource.setUsingGridMode(isUsingGridMode)
+        return dataSource.setUsingGridMode(isUsingGridMode)
     }
-
 }

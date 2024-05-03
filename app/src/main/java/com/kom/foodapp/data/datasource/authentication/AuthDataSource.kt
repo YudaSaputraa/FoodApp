@@ -10,17 +10,21 @@ Written by Komang Yuda Saputra
 Github : https://github.com/YudaSaputraa
  **/
 interface AuthDataSource {
+    @Throws(exceptionClasses = [Exception::class])
+    suspend fun doLogin(
+        email: String,
+        password: String,
+    ): Boolean
 
     @Throws(exceptionClasses = [Exception::class])
-    suspend fun doLogin(email: String, password: String): Boolean
-
-
-    @Throws(exceptionClasses = [Exception::class])
-    suspend fun doRegister(fullName: String, email: String, password: String): Boolean
+    suspend fun doRegister(
+        fullName: String,
+        email: String,
+        password: String,
+    ): Boolean
 
     @Throws(exceptionClasses = [Exception::class])
     suspend fun updateProfile(fullName: String? = null): Boolean
-
 
     @Throws(exceptionClasses = [Exception::class])
     suspend fun updatePassword(newPassword: String): Boolean
@@ -30,23 +34,28 @@ interface AuthDataSource {
 
     @Throws(exceptionClasses = [Exception::class])
     suspend fun reqChangePasswordByEmailWithoutLogin(email: String): Boolean
+
     fun reqChangePasswordByEmail(): Boolean
+
     fun doLogout(): Boolean
+
     fun isLoggedIn(): Boolean
+
     fun getCurrentUser(): User?
-
-
 }
 
 class FirebaseAuthDataSource(private val service: FirebaseService) : AuthDataSource {
-    override suspend fun doLogin(email: String, password: String): Boolean {
+    override suspend fun doLogin(
+        email: String,
+        password: String,
+    ): Boolean {
         return service.doLogin(email, password)
     }
 
     override suspend fun doRegister(
         fullName: String,
         email: String,
-        password: String
+        password: String,
     ): Boolean {
         return service.doRegister(fullName, email, password)
     }
@@ -82,5 +91,4 @@ class FirebaseAuthDataSource(private val service: FirebaseService) : AuthDataSou
     override fun getCurrentUser(): User? {
         return service.getCurrentUser().toUser()
     }
-
 }

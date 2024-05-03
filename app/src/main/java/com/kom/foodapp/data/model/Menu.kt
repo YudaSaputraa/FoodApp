@@ -9,10 +9,9 @@ data class Menu(
     var id: String? = UUID.randomUUID().toString(),
     var imageUrl: String,
     var name: String,
-    var formattedPrice : String,
+    var formattedPrice: String,
     var price: Double,
     val desc: String,
     val locationUrl: String,
     val locationAddress: String,
-
-    ) : Parcelable
+) : Parcelable

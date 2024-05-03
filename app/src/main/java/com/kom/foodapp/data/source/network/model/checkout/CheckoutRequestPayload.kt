@@ -1,8 +1,7 @@
 package com.kom.foodapp.data.source.network.model.checkout
 
-
-import com.google.gson.annotations.SerializedName
 import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 
 @Keep
 data class CheckoutRequestPayload(
@@ -11,5 +10,5 @@ data class CheckoutRequestPayload(
     @SerializedName("total")
     val total: Int?,
     @SerializedName("username")
-    val username: String?
+    val username: String?,
 )
