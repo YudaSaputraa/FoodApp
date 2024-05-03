@@ -19,19 +19,22 @@ import com.kom.foodapp.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment() {
-
     private lateinit var binding: FragmentProfileBinding
     private val profileViewModel: ProfileViewModel by viewModel()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentProfileBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         editProfile()
         setClickListener()
@@ -40,59 +43,63 @@ class ProfileFragment : Fragment() {
     }
 
     private fun confirmChangeProfileData() {
-        val dialog = AlertDialog.Builder(requireContext())
-            .setMessage(getString(R.string.text_confirm_edit_profile_data))
-            .setPositiveButton(
-                "Ya"
-            ) { dialog, id ->
-                doChangeFullName()
-            }
-            .setNegativeButton(
-                "Tidak"
-            ) { dialog, id ->
-            }.create()
+        val dialog =
+            AlertDialog.Builder(requireContext())
+                .setMessage(getString(R.string.text_confirm_edit_profile_data))
+                .setPositiveButton(
+                    "Ya",
+                ) { dialog, id ->
+                    doChangeFullName()
+                }
+                .setNegativeButton(
+                    "Tidak",
+                ) { dialog, id ->
+                }.create()
         dialog.show()
     }
 
     private fun confirmChangePassword() {
-        val dialog = AlertDialog.Builder(requireContext())
-            .setMessage(getString(R.string.text_confirm_change_password_dialog))
-            .setPositiveButton(
-                "Ya"
-            ) { dialog, id ->
-                profileViewModel.requestChangePasswordByEmail()
-                requestChangePasswordDialog()
-            }
-            .setNegativeButton(
-                "Tidak"
-            ) { dialog, id ->
-            }.create()
+        val dialog =
+            AlertDialog.Builder(requireContext())
+                .setMessage(getString(R.string.text_confirm_change_password_dialog))
+                .setPositiveButton(
+                    "Ya",
+                ) { dialog, id ->
+                    profileViewModel.requestChangePasswordByEmail()
+                    requestChangePasswordDialog()
+                }
+                .setNegativeButton(
+                    "Tidak",
+                ) { dialog, id ->
+                }.create()
         dialog.show()
     }
 
     private fun requestChangePasswordDialog() {
-        val dialog = AlertDialog.Builder(requireContext())
-            .setMessage(getString(R.string.text_dialog_when_change_password))
-            .setPositiveButton(
-                getString(R.string.text_positive_button_dialog)
-            ) { dialog, id ->
-
-
-            }.create()
+        val dialog =
+            AlertDialog.Builder(requireContext())
+                .setMessage(getString(R.string.text_dialog_when_change_password))
+                .setPositiveButton(
+                    getString(R.string.text_positive_button_dialog),
+                ) { dialog, id ->
+                }.create()
         dialog.show()
     }
 
     private fun observeProfileData() {
         val currentUser = profileViewModel.getCurrentUser()
         profileViewModel.fetchProfileData()
-        profileViewModel.profileData.observe(viewLifecycleOwner, Observer { profile ->
-            binding.layoutProfile.ivProfile.load(profile.image) {
-                crossfade(true)
-                error(R.drawable.img_error)
-            }
-            binding.layoutProfile.etFullName.setText(currentUser?.fullName)
-            binding.layoutProfile.etEmail.setText(currentUser?.email)
-        })
+        profileViewModel.profileData.observe(
+            viewLifecycleOwner,
+            Observer { profile ->
+                binding.layoutProfile.ivProfile.load(profile.image) {
+                    crossfade(true)
+                    error(R.drawable.img_error)
+                }
+                binding.layoutProfile.etFullName.setText(currentUser?.fullName)
+                binding.layoutProfile.etEmail.setText(currentUser?.email)
+            },
+        )
     }
 
     private fun loggedOut() {
@@ -102,15 +109,16 @@ class ProfileFragment : Fragment() {
             navigateToLogin()
             requireActivity().supportFragmentManager.popBackStack(
                 null,
-                FragmentManager.POP_BACK_STACK_INCLUSIVE
+                FragmentManager.POP_BACK_STACK_INCLUSIVE,
             )
-
         }
     }
 
     private fun navigateToLogin() {
-        startActivity(Intent(requireContext(), LoginActivity::class.java).apply {
-        })
+        startActivity(
+            Intent(requireContext(), LoginActivity::class.java).apply {
+            },
+        )
     }
 
     private fun setClickListener() {
@@ -123,8 +131,9 @@ class ProfileFragment : Fragment() {
             }
 
             btnSave.setOnClickListener {
-                if (isFormFullNameValid())
+                if (isFormFullNameValid()) {
                     confirmChangeProfileData()
+                }
             }
 
             btnChangePassword.setOnClickListener {
@@ -163,7 +172,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-
     private fun changeProfileProcess(newFullName: String) {
         profileViewModel.updateProfile(newFullName).observe(viewLifecycleOwner) { result ->
             result.proceedWhen(
@@ -171,7 +179,8 @@ class ProfileFragment : Fragment() {
                     binding.btnSave.isVisible = false
                     Toast.makeText(
                         requireContext(),
-                        getString(R.string.text_success_edit_profile), Toast.LENGTH_SHORT
+                        getString(R.string.text_success_edit_profile),
+                        Toast.LENGTH_SHORT,
                     ).show()
                     profileViewModel.changeEditMode()
                 },
@@ -179,9 +188,9 @@ class ProfileFragment : Fragment() {
                     Toast.makeText(
                         requireContext(),
                         "error ${it.exception?.message}",
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_SHORT,
                     ).show()
-                }
+                },
             )
         }
     }
@@ -189,8 +198,6 @@ class ProfileFragment : Fragment() {
     private fun editProfile() {
         profileViewModel.isEditProfile.observe(viewLifecycleOwner) {
             binding.layoutProfile.etFullName.isEnabled = it
-
         }
     }
-
 }

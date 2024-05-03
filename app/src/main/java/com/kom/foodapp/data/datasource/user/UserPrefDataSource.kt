@@ -7,18 +7,17 @@ Written by Komang Yuda Saputra
 Github : https://github.com/YudaSaputraa
  **/
 interface UserPrefDataSource {
-    fun isUsingGridMode() : Boolean
-    fun setUsingGridMode(isUsingGridMode : Boolean)
+    fun isUsingGridMode(): Boolean
+
+    fun setUsingGridMode(isUsingGridMode: Boolean)
 }
 
-class UserPrefDataSourceImpl(private val userPreference: UserPreference) : UserPrefDataSource{
+class UserPrefDataSourceImpl(private val userPreference: UserPreference) : UserPrefDataSource {
     override fun isUsingGridMode(): Boolean {
         return userPreference.isUsingGridMode()
     }
 
     override fun setUsingGridMode(isUsingGridMode: Boolean) {
-       return userPreference.setUsingGridMode(isUsingGridMode)
+        return userPreference.setUsingGridMode(isUsingGridMode)
     }
-
-
 }

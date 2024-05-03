@@ -13,43 +13,47 @@ Github : https://github.com/YudaSaputraa
  **/
 interface UserRepository {
     @Throws(exceptionClasses = [Exception::class])
-    fun doLogin(email: String, password: String): Flow<ResultWrapper<Boolean>>
-
+    fun doLogin(
+        email: String,
+        password: String,
+    ): Flow<ResultWrapper<Boolean>>
 
     @Throws(exceptionClasses = [Exception::class])
     fun doRegister(
         fullName: String,
         email: String,
-        password: String
+        password: String,
     ): Flow<ResultWrapper<Boolean>>
-
 
     fun updateProfile(fullName: String? = null): Flow<ResultWrapper<Boolean>>
 
-
     fun updatePassword(newPassword: String): Flow<ResultWrapper<Boolean>>
-
 
     fun updateEmail(newEmail: String): Flow<ResultWrapper<Boolean>>
 
     fun reqChangePasswordByEmailWithoutLogin(email: String): Flow<ResultWrapper<Boolean>>
 
-
     fun reqChangePasswordByEmail(): Boolean
+
     fun doLogout(): Boolean
+
     fun isLoggedIn(): Boolean
+
     fun getCurrentUser(): User?
 }
 
 class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepository {
-    override fun doLogin(email: String, password: String): Flow<ResultWrapper<Boolean>> {
+    override fun doLogin(
+        email: String,
+        password: String,
+    ): Flow<ResultWrapper<Boolean>> {
         return proceedFlow { dataSource.doLogin(email, password) }
     }
 
     override fun doRegister(
         fullName: String,
         email: String,
-        password: String
+        password: String,
     ): Flow<ResultWrapper<Boolean>> {
         return proceedFlow { dataSource.doRegister(fullName, email, password) }
     }
@@ -85,5 +89,4 @@ class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepositor
     override fun getCurrentUser(): User? {
         return dataSource.getCurrentUser()
     }
-
 }

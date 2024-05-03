@@ -10,12 +10,15 @@ Written by Komang Yuda Saputra
 Github : https://github.com/YudaSaputraa
  **/
 class LoginViewModel(private val repository: UserRepository) : ViewModel() {
-    fun doLogin(email: String, password: String) =
-        repository
-            .doLogin(email, password)
-            .asLiveData(Dispatchers.IO)
-
-    fun doRequestChangePasswordByEmailWithoutLogin(email: String) = repository
-        .reqChangePasswordByEmailWithoutLogin(email)
+    fun doLogin(
+        email: String,
+        password: String,
+    ) = repository
+        .doLogin(email, password)
         .asLiveData(Dispatchers.IO)
+
+    fun doRequestChangePasswordByEmailWithoutLogin(email: String) =
+        repository
+            .reqChangePasswordByEmailWithoutLogin(email)
+            .asLiveData(Dispatchers.IO)
 }

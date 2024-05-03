@@ -14,7 +14,5 @@ data class CheckoutResponse(
     @SerializedName("message")
     val message: String?,
     @SerializedName("code")
-    val code: Int?
-
-
+    val code: Int?,
 )

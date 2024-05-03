@@ -10,8 +10,7 @@ Github : https://github.com/YudaSaputraa
 fun CategoryItemResponse?.toCategory() =
     Category(
         imageUrl = this?.imgUrl.orEmpty(),
-        name = this?.name.orEmpty()
+        name = this?.name.orEmpty(),
     )
 
-fun Collection<CategoryItemResponse>?.toCategories() =
-    this?.map { it.toCategory() } ?: listOf()
+fun Collection<CategoryItemResponse>?.toCategories() = this?.map { it.toCategory() } ?: listOf()

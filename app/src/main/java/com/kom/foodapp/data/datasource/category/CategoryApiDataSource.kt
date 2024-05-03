@@ -8,7 +8,7 @@ Written by Komang Yuda Saputra
 Github : https://github.com/YudaSaputraa
  **/
 class CategoryApiDataSource(
-    private val service: FoodAppApiService
+    private val service: FoodAppApiService,
 ) : CategoryDataSource {
     override suspend fun getCategoryData(): CategoryResponse {
         return service.getCategories()

@@ -6,7 +6,7 @@ data class Profile(
     var id: String = UUID.randomUUID().toString(),
     var image: String,
     var name: String,
-    var email : String,
+    var email: String,
     var phoneNumber: String,
     var password: String,
     var locationAddress: String,

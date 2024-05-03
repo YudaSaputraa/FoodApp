@@ -2,6 +2,8 @@ package com.kom.foodapp.presentation.home
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +23,6 @@ import com.kom.foodapp.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
-
     private lateinit var binding: FragmentHomeBinding
 
     private val homeViewModel: HomeViewModel by viewModel()
@@ -38,14 +39,18 @@ class HomeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         val isUsingGridMode = homeViewModel.isUsingGridMode()
         bindModeList(isUsingGridMode)
@@ -57,6 +62,42 @@ class HomeFragment : Fragment() {
         setThemeMode()
         setDisplayName()
         setListMenuOnCategoryClicked()
+        searchMenu()
+    }
+
+    private fun searchMenu() {
+        binding.layoutHeader.layoutSearchBar.etSearch.addTextChangedListener(
+            object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    searchMenuByName(s.toString())
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int,
+                ) {
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int,
+                ) {
+                }
+            },
+        )
+    }
+
+    private fun searchMenuByName(query: String) {
+        if (query.isNotEmpty()) {
+            val filteredMenu = menuItems?.filter { it.name.contains(query, ignoreCase = true) }
+            filteredMenu?.let { bindMenu(it) }
+        } else {
+            loadMenuData()
+        }
     }
 
     private fun loadMenuData() {
@@ -138,7 +179,7 @@ class HomeFragment : Fragment() {
                     binding.layoutOnEmptyDataState.ivOnEmptyData.isVisible = false
                     binding.layoutOnEmptyDataState.tvOnEmptyData.isVisible = false
                     binding.rvMenu.isVisible = false
-                }
+                },
             )
         }
     }
@@ -152,14 +193,14 @@ class HomeFragment : Fragment() {
                 R.id.tv_menu_title,
                 ConstraintSet.TOP,
                 R.id.layout_on_empty_data_state_category,
-                ConstraintSet.BOTTOM
+                ConstraintSet.BOTTOM,
             )
         } else {
             constraintSet.connect(
                 R.id.tv_menu_title,
                 ConstraintSet.TOP,
                 R.id.rv_category,
-                ConstraintSet.BOTTOM
+                ConstraintSet.BOTTOM,
             )
         }
         constraintSet.applyTo(binding.clContent)
@@ -209,7 +250,7 @@ class HomeFragment : Fragment() {
                     binding.layoutOnEmptyDataStateCategory.tvOnEmptyData.isVisible = false
                     binding.rvCategory.isVisible = false
                     setMenuTitleConstraint(true)
-                }
+                },
             )
         }
     }
@@ -221,9 +262,9 @@ class HomeFragment : Fragment() {
                 binding.layoutHeader.ivThemeMode.setImageResource(R.drawable.ic_dark_mode)
                 Toast.makeText(
                     requireContext(),
-                    getString(R.string.text_toast_theme_mode), Toast.LENGTH_SHORT
+                    getString(R.string.text_toast_theme_mode),
+                    Toast.LENGTH_SHORT,
                 ).show()
-
             } else {
                 binding.layoutHeader.ivThemeMode.setImageResource(R.drawable.ic_light_mode)
                 Toast.makeText(requireContext(), R.string.text_toast_theme_mode, Toast.LENGTH_SHORT)
@@ -234,35 +275,38 @@ class HomeFragment : Fragment() {
 
     private fun bindModeList(isGridMode: Boolean) {
         val listMode =
-            if (isGridMode)
+            if (isGridMode) {
                 MenuAdapter.MODE_GRID
-            else
+            } else {
                 MenuAdapter.MODE_LIST
-        menuAdapter = MenuAdapter(
-            listMode = listMode,
-            listener = object : MenuAdapter.OnItemClickedListener<Menu> {
-                override fun onItemSelected(item: Menu) {
-                    pushToDetail(item)
-                }
-
-                override fun onItemAddedToCart(item: Menu) {
-                    homeViewModel.addItemToCart(item)
-                }
-
             }
-        )
+        menuAdapter =
+            MenuAdapter(
+                listMode = listMode,
+                listener =
+                    object : MenuAdapter.OnItemClickedListener<Menu> {
+                        override fun onItemSelected(item: Menu) {
+                            pushToDetail(item)
+                        }
+
+                        override fun onItemAddedToCart(item: Menu) {
+                            homeViewModel.addItemToCart(item)
+                        }
+                    },
+            )
         binding.rvMenu.apply {
             adapter = this@HomeFragment.menuAdapter
-            layoutManager = GridLayoutManager(
-                requireContext(),
-                if (isGridMode)
-                    2
-                else
-                    1
-            )
+            layoutManager =
+                GridLayoutManager(
+                    requireContext(),
+                    if (isGridMode) {
+                        2
+                    } else {
+                        1
+                    },
+                )
         }
         setMenuTitleConstraint(false)
-
     }
 
     private fun bindCategory(categories: List<Category>) {
@@ -277,7 +321,8 @@ class HomeFragment : Fragment() {
 
     private fun pushToDetail(item: Menu) {
         DetailActivity.startActivity(
-            requireContext(), item
+            requireContext(),
+            item,
         )
     }
 
@@ -285,10 +330,11 @@ class HomeFragment : Fragment() {
         var isGridMode = usingGrid
         binding.ivMenuList.setOnClickListener {
             isGridMode = !isGridMode
-            if (isGridMode)
+            if (isGridMode) {
                 binding.ivMenuList.setImageResource(R.drawable.ic_menu_list)
-            else
+            } else {
                 binding.ivMenuList.setImageResource(R.drawable.ic_menu_grid)
+            }
             bindModeList(isGridMode)
             loadMenuData()
             homeViewModel.setUsingGridMode(isGridMode)

@@ -33,11 +33,9 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         setLoginForm()
         setClickListeners()
-
     }
 
     private fun setClickListeners() {
-
         binding.btnLogin.setOnClickListener {
             doLogin()
         }
@@ -48,9 +46,7 @@ class LoginActivity : AppCompatActivity() {
         binding.tvForgetPassword.setOnClickListener {
             createEmailInputDialog(this)
         }
-
     }
-
 
     private fun createEmailInputDialog(context: Context) {
         val builder = AlertDialog.Builder(context)
@@ -60,10 +56,11 @@ class LoginActivity : AppCompatActivity() {
         val textInputLayout = TextInputLayout(context)
         textInputLayout.hint = "Email"
         val input = EditText(context)
-        val layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
+        val layoutParams =
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+            )
         input.layoutParams = layoutParams
         input.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 
@@ -92,33 +89,34 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(
                         this,
                         "Error :  ${it.exception?.message}",
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_SHORT,
                     ).show()
                     Log.d(
                         "reqChangePasswordByEmail",
-                        "createEmailInputDialog: ${it.exception?.message}"
+                        "createEmailInputDialog: ${it.exception?.message}",
                     )
-                }
+                },
             )
         }
     }
 
-
     private fun requestChangePasswordDialogSuccess() {
-        val dialog = AlertDialog.Builder(this)
-            .setMessage(getString(R.string.text_dialog_when_change_password))
-            .setPositiveButton(
-                getString(R.string.text_positive_button_dialog)
-            ) { dialog, id ->
-
-            }.create()
+        val dialog =
+            AlertDialog.Builder(this)
+                .setMessage(getString(R.string.text_dialog_when_change_password))
+                .setPositiveButton(
+                    getString(R.string.text_positive_button_dialog),
+                ) { dialog, id ->
+                }.create()
         dialog.show()
     }
 
     private fun navigateToRegister() {
-        startActivity(Intent(this, RegisterActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-        })
+        startActivity(
+            Intent(this, RegisterActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
     }
 
     private fun doLogin() {
@@ -129,7 +127,10 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun loginProcess(email: String, password: String) {
+    private fun loginProcess(
+        email: String,
+        password: String,
+    ) {
         loginViewModel.doLogin(email, password).observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
@@ -144,11 +145,12 @@ class LoginActivity : AppCompatActivity() {
                     binding.btnLogin.text = getString(R.string.text_login)
 
                     val errorMessage = it.exception?.message ?: getString(R.string.error_unknown)
-                    val errorText = if (errorMessage.contains("password")) {
-                        getString(R.string.error_wrong_password)
-                    } else {
-                        getString(R.string.error_wrong_email)
-                    }
+                    val errorText =
+                        if (errorMessage.contains("password")) {
+                            getString(R.string.error_wrong_password)
+                        } else {
+                            getString(R.string.error_wrong_email)
+                        }
 
                     Toast.makeText(this, errorText, Toast.LENGTH_SHORT).show()
                 },
@@ -156,7 +158,7 @@ class LoginActivity : AppCompatActivity() {
                     binding.pbLoading.isVisible = true
                     binding.btnLogin.text = ""
                     binding.btnLogin.isEnabled = false
-                }
+                },
             )
         }
     }
@@ -166,10 +168,9 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.layoutForm.etPassword.text.toString().trim()
 
         return emailValidation(email) &&
-                passwordValidation(
-                    password, binding.layoutForm.tilPassword
-                )
-
+            passwordValidation(
+                password, binding.layoutForm.tilPassword,
+            )
     }
 
     private fun setLoginForm() {
@@ -180,9 +181,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToMain() {
-        startActivity(Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        })
+        startActivity(
+            Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            },
+        )
     }
 
     private fun emailValidation(email: String): Boolean {
@@ -202,7 +205,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun passwordValidation(
         confirmPassword: String,
-        textInputLayout: TextInputLayout
+        textInputLayout: TextInputLayout,
     ): Boolean {
         return if (confirmPassword.isEmpty()) {
             textInputLayout.isErrorEnabled = true

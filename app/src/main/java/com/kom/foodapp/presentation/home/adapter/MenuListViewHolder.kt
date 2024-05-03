@@ -9,7 +9,7 @@ import com.kom.foodapp.utils.formatToRupiah
 
 class MenuListViewHolder(
     private val binding: ItemMenuListBinding,
-    private val listener: MenuAdapter.OnItemClickedListener<Menu>
+    private val listener: MenuAdapter.OnItemClickedListener<Menu>,
 ) : RecyclerView.ViewHolder(binding.root), ViewHolderBinder<Menu> {
     override fun bind(item: Menu) {
         item.let {

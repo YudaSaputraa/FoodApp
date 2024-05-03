@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class CartViewModel(
     private val cartRepository: CartRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) :
     ViewModel() {
     fun getAllCarts() = cartRepository.getUserCartData().asLiveData(Dispatchers.IO)

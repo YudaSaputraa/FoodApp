@@ -7,24 +7,23 @@ import androidx.room.RoomDatabase
 import com.kom.foodapp.data.source.local.database.dao.CartDao
 import com.kom.foodapp.data.source.local.database.entity.CartEntity
 
-
 @Database(
     entities = [CartEntity::class],
     version = 1,
-    exportSchema = true
+    exportSchema = true,
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun cartDao(): CartDao
 
     companion object {
         private const val DB_NAME = "FoodApp.db"
+
         fun createInstance(context: Context): AppDatabase {
             return Room.databaseBuilder(
                 context.applicationContext,
                 AppDatabase::class.java,
-                DB_NAME
+                DB_NAME,
             ).fallbackToDestructiveMigration().build()
         }
     }
-
 }
