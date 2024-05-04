@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 class CheckoutActivity : AppCompatActivity() {
     private val binding: ActivityCheckoutBinding by lazy {
@@ -64,12 +65,17 @@ class CheckoutActivity : AppCompatActivity() {
         val dialogBinding = LayoutDialogOrderBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
 
-        val currentDateAndTime = SimpleDateFormat("dd MMMM yyyy HH:mm:ss").format(Date())
+        val currentDateAndTime =
+            SimpleDateFormat.getDateTimeInstance(
+                SimpleDateFormat.LONG,
+                SimpleDateFormat.SHORT,
+                Locale.getDefault(),
+            ).format(Date())
         dialogBinding.tvDateTime.text = currentDateAndTime
         checkoutViewModel.checkoutData.value?.payload?.let { (carts, _, totalPrice) ->
             dialogBinding.tvTotalPriceSuccess.text = totalPrice.formatToRupiah()
         }
-        dialogBinding.rvSummaryOrder.adapter = priceItemAdapter
+        dialogBinding.rvSummaryOrderDialog.adapter = priceItemAdapter
         dialog.show()
 
         dialogBinding.btnBackOnSuccess.setOnClickListener {
