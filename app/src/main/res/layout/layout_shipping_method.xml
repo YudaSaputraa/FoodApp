@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
-        android:id="@+id/rg_payment_method"
+        android:id="@+id/rg_shipping_method"
         android:layout_width="0dp"
         android:layout_marginTop="8dp"
         android:layout_height="wrap_content"
