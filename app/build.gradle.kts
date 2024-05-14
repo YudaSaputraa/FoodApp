@@ -97,6 +97,7 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.auth)
+    testImplementation("junit:junit:4.12")
     ksp(libs.room.compiler)
     implementation(libs.coroutine.core)
     implementation(libs.coroutine.android)
@@ -109,4 +110,10 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp)
+
+    testImplementation(libs.mockk.agent)
+    androidTestImplementation(libs.mockk.android)
+    testImplementation(libs.coroutine.test)
+    testImplementation(libs.turbine)
+    testImplementation(libs.core.testing)
 }

@@ -9,11 +9,7 @@ Github : https://github.com/YudaSaputraa
 data class User(
     val id: String,
     val fullName: String,
-//    val username : String,
     val email: String,
-//    val password : String,
-//    val phoneNumber : String,
-//    val imgUrl : String
 )
 
 fun FirebaseUser?.toUser() =

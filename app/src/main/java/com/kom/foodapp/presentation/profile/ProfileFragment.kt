@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
 import coil.load
 import com.kom.foodapp.R
 import com.kom.foodapp.databinding.FragmentProfileBinding
@@ -88,18 +87,14 @@ class ProfileFragment : Fragment() {
 
     private fun observeProfileData() {
         val currentUser = profileViewModel.getCurrentUser()
-        profileViewModel.fetchProfileData()
-        profileViewModel.profileData.observe(
-            viewLifecycleOwner,
-            Observer { profile ->
-                binding.layoutProfile.ivProfile.load(profile.image) {
-                    crossfade(true)
-                    error(R.drawable.img_error)
-                }
-                binding.layoutProfile.etFullName.setText(currentUser?.fullName)
-                binding.layoutProfile.etEmail.setText(currentUser?.email)
-            },
-        )
+        binding.layoutProfile.ivProfile.load(
+            "https://static.wikia.nocookie.net/cartoons/images/e/ed/Profile_-_SpongeBob_SquarePants.png/revision/latest?cb=20230305115632",
+        ) {
+            crossfade(true)
+            error(R.drawable.img_error)
+        }
+        binding.layoutProfile.etFullName.setText(currentUser?.fullName)
+        binding.layoutProfile.etEmail.setText(currentUser?.email)
     }
 
     private fun loggedOut() {
