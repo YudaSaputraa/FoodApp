@@ -9,8 +9,6 @@ import com.kom.foodapp.data.datasource.category.CategoryApiDataSource
 import com.kom.foodapp.data.datasource.category.CategoryDataSource
 import com.kom.foodapp.data.datasource.menu.MenuApiDataSource
 import com.kom.foodapp.data.datasource.menu.MenuDataSource
-import com.kom.foodapp.data.datasource.profile.ProfileDataSource
-import com.kom.foodapp.data.datasource.profile.ProfileDataSourceImpl
 import com.kom.foodapp.data.datasource.user.UserPrefDataSource
 import com.kom.foodapp.data.datasource.user.UserPrefDataSourceImpl
 import com.kom.foodapp.data.repository.CartRepository
@@ -77,7 +75,6 @@ object AppModules {
             single<CartDataSource> { CartDatabaseDataSource(get()) }
             single<CategoryDataSource> { CategoryApiDataSource(get()) }
             single<MenuDataSource> { MenuApiDataSource(get()) }
-            single<ProfileDataSource> { ProfileDataSourceImpl() }
             single<UserPrefDataSource> { UserPrefDataSourceImpl(get()) }
         }
 
