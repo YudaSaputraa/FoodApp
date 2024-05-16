@@ -25,7 +25,7 @@ class MenuRepositoryImpl(
     override fun getMenu(categoryName: String?): Flow<ResultWrapper<List<Menu>>> {
         return flow {
             emit(ResultWrapper.Loading())
-            delay(1000)
+            delay(2000)
             val menuData = dataSource.getMenuData(categoryName).data.toMenus()
             emit(ResultWrapper.Success(menuData))
         }
