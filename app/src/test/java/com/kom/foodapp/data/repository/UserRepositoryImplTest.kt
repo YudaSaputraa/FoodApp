@@ -317,11 +317,11 @@ class UserRepositoryImplTest {
 
     @Test
     fun reqChangePasswordByEmailWithoutLogin_success() {
-        val password = "komang123"
+        val email = "komang@gmail.com"
 
         coEvery { dataSource.reqChangePasswordByEmailWithoutLogin(any()) } returns true
         runTest {
-            repository.reqChangePasswordByEmailWithoutLogin(password).map {
+            repository.reqChangePasswordByEmailWithoutLogin(email).map {
                 delay(100)
                 it
             }.test {
@@ -336,11 +336,11 @@ class UserRepositoryImplTest {
 
     @Test
     fun reqChangePasswordByEmailWithoutLogin_loading() {
-        val password = "komang123"
+        val email = "komang@gmail.com"
 
         coEvery { dataSource.reqChangePasswordByEmailWithoutLogin(any()) } returns true
         runTest {
-            repository.reqChangePasswordByEmailWithoutLogin(password).map {
+            repository.reqChangePasswordByEmailWithoutLogin(email).map {
                 delay(100)
                 it
             }.test {
@@ -354,11 +354,11 @@ class UserRepositoryImplTest {
 
     @Test
     fun reqChangePasswordByEmailWithoutLogin_error() {
-        val password = "komang123"
+        val email = "komang@gmail.com"
 
         coEvery { dataSource.reqChangePasswordByEmailWithoutLogin(any()) } throws IOException("reqChangePass error")
         runTest {
-            repository.reqChangePasswordByEmailWithoutLogin(password).map {
+            repository.reqChangePasswordByEmailWithoutLogin(email).map {
                 delay(100)
                 it
             }.test {
